@@ -8,16 +8,22 @@
   </head>
   <body>
     <div class="container">
-      <h2>Minerva Customizer</h2>
+      <div class="panel">
+        <div class="header-row">
+          <div>
+            <h2>Minerva Customizer</h2>
+            <p class="subtitle">Personalize Minerva Forum with safer local style overrides.</p>
+          </div>
+        </div>
 
-      <label>Theme
-        <select id="theme-select">
-          <option value="default">Default</option>
-          <option value="dark">Dark</option>
-          <option value="high-contrast">High Contrast</option>
-          <option value="warm">Warm</option>
-        </select>
-      </label>
+        <label>Theme
+          <select id="theme-select">
+            <option value="default">Default</option>
+            <option value="dark">Dark</option>
+            <option value="high-contrast">High Contrast</option>
+            <option value="warm">Warm</option>
+          </select>
+        </label>
 
       <label>Body Font
         <select id="font-select">
@@ -25,7 +31,10 @@
           <option value="Inter">Inter</option>
           <option value="system-ui">System UI</option>
           <option value="Georgia">Georgia</option>
-          <option value="JetBrains Mono">JetBrains Mono</option>
+          <option value="Roboto">Roboto</option>
+          <option value="Arial">Arial</option>
+          <option value="Fira Sans">Fira Sans</option>
+          <option value="Courier New">Courier New</option>
         </select>
       </label>
 
@@ -35,6 +44,8 @@
           <option value="Georgia">Georgia</option>
           <option value="Chronicle Deck A">Chronicle Deck A</option>
           <option value="Inter">Inter</option>
+          <option value="Roboto Slab">Roboto Slab</option>
+          <option value="Times New Roman">Times New Roman</option>
         </select>
       </label>
 
@@ -46,18 +57,20 @@
         <input id="accent-color" type="color" value="#0A78BF">
       </label>
 
-      <label><input id="hide-imagery" type="checkbox"> Hide cityscape imagery</label>
-      <label><input id="compact-sidebar" type="checkbox"> Compact sidebar</label>
-      <label><input id="rounded-cards" type="checkbox"> Rounded UI</label>
-      <label><input id="hide-intercom" type="checkbox"> Hide Intercom chat</label>
+      <label class="checkbox-label"><input id="hide-imagery" type="checkbox"> Hide cityscape imagery</label>
+      <label class="checkbox-label"><input id="compact-sidebar" type="checkbox"> Compact sidebar</label>
+      <label class="checkbox-label"><input id="rounded-cards" type="checkbox"> Rounded UI (sidebar + cards/panels)</label>
+      <label class="checkbox-label"><input id="hide-intercom" type="checkbox"> Hide Intercom chat (when present)</label>
 
       <div class="actions">
         <button id="reset-btn">Reset</button>
       </div>
+      <p class="small-note">The Intercom toggle hides the chat widget if Minerva loads it. If the button doesn’t change anything, the chat is not present on that page.</p>
     </div>
+  </div>
 
-    <script src="../utils/defaults.js"></script>
-    <script src="../utils/storage.js"></script>
-    <script src="popup.js"></script>
+  <script src="../utils/defaults.js"></script>
+  <script src="../utils/storage.js"></script>
+  <script src="popup.js"></script>
   </body>
 </html>

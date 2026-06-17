@@ -53,16 +53,28 @@
     }
 
     if (prefs.theme === 'dark') {
-      css += '  --black: #FFFFFF !important;\n';
-      css += '  --white: #0A0A0A !important;\n';
-      css += '  --black-tint-97: #0f0f10 !important;\n';
-      css += '  --black-tint-95: #111111 !important;\n';
+      css += '  --black-tint-10: #101316 !important;\n';
+      css += '  --black-tint-20: #1f232c !important;\n';
+      css += '  --black-tint-40: #2f3842 !important;\n';
+      css += '  --black-tint-70: #6f7882 !important;\n';
+      css += '  --black-tint-90: #a7acb2 !important;\n';
+      css += '  --black-tint-95: #d2d3d7 !important;\n';
+      css += '  --black-tint-97: #f2f3f5 !important;\n';
       css += '  --blue-tint-90: #18202F !important;\n';
     } else if (prefs.theme === 'high-contrast') {
       css += '  --black: #000000 !important;\n';
       css += '  --white: #FFFFFF !important;\n';
+      css += '  --black-tint-10: #000000 !important;\n';
+      css += '  --black-tint-20: #000000 !important;\n';
+      css += '  --black-tint-40: #101010 !important;\n';
+      css += '  --black-tint-70: #333333 !important;\n';
+      css += '  --black-tint-90: #f8f8f8 !important;\n';
+      css += '  --black-tint-95: #ffffff !important;\n';
+      css += '  --black-tint-97: #ffffff !important;\n';
       css += '  --blue: #FFD500 !important;\n';
-      css += '  --black-tint-95: #F6F6F6 !important;\n';
+      css += '  --blue-shade-20: #000000 !important;\n';
+      css += '  --blue-tint-20: #000000 !important;\n';
+      css += '  --blue-tint-90: #FFF9C1 !important;\n';
     } else if (prefs.theme === 'warm') {
       css += '  --blue: #C85A2A !important;\n';
       css += '  --blue-tint-90: #FFF5ED !important;\n';
@@ -73,7 +85,9 @@
 
     if (prefs.hideImagery) {
       css += 'div.imagery { display: none !important; }\n';
-      css += 'div.subheader { padding: 12px 24px !important; }\n';
+      css += 'div.subheader { padding: 12px 24px !important; min-height: 0 !important; height: auto !important; background-image: none !important; }\n';
+      css += 'div.subheader > * { margin-top: 0 !important; }\n';
+      css += 'div.subheader .imagery { display: none !important; }\n';
     }
 
     if (prefs.compactSidebar) {
@@ -83,11 +97,17 @@
     }
 
     if (prefs.hideIntercom) {
-      css += 'iframe#intercom-frame, .intercom-lightweight-app { display: none !important; }\n';
+      css += 'iframe#intercom-frame, .intercom-lightweight-app, .intercom-launcher, .intercom-lightweight-app-body, .intercom-container { display: none !important; }\n';
     }
 
     if (prefs.roundedCards) {
-      css += 'table.fds-table, .fds-card, .home-view-right-column > div { border-radius: 12px !important; overflow: hidden !important; }\n';
+      css += 'table.fds-table, .fds-card, .home-view-right-column > div, .announcement-region, .office-hours-region, .announcement-region .card, .office-hours-region .card { border-radius: 14px !important; overflow: hidden !important; }\n';
+    }
+
+    if (prefs.theme === 'dark' || prefs.theme === 'high-contrast') {
+      css += 'header#header, .subheader, aside.sidebar, article#main-semantic-content, .announcement-region, .office-hours-region { background-color: var(--black) !important; color: var(--white) !important; }\n';
+      css += 'header#header a, .navigation-link, .link-text, .subheader, .subheader * { color: var(--white) !important; }\n';
+      css += 'button, select, input, .fds-card { color: var(--white) !important; }\n';
     }
 
     return css;
