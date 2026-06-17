@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Minerva Forum Customizer",
+  "version": "1.0.0",
+  "description": "Personalize the appearance of forum.minerva.edu",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://forum.minerva.edu/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["*://forum.minerva.edu/*"],
+      "js": [
+        "utils/defaults.js",
+        "utils/storage.js",
+        "content/content.js"
+      ],
+      "css": ["styles/injected.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html"
+  }
+}

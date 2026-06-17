@@ -1,0 +1,4 @@
+/* Base injected CSS — minimal baseline. */
+:root {
+  /* Runtime overrides are injected by content.js */
+}
