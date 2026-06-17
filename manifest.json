@@ -5,7 +5,8 @@
   "description": "Personalize the appearance of forum.minerva.edu",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "clipboardWrite"
   ],
   "host_permissions": [
     "*://forum.minerva.edu/*"

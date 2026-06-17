@@ -8,6 +8,5 @@ window.MINERVA_DEFAULT_PREFS = {
   accentColor: null,
   headerPreset: 'default',
   headerText: '',
-  compactSidebar: false,
   roundedCards: false
 };
