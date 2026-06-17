@@ -101,7 +101,9 @@
       css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url("${HEADER_IMAGES[prefs.headerPreset]}") !important; background-size: cover !important; background-position: center center !important; }\n`;
     }
 
-    css += `${headerSelector} { position: relative !important; overflow: hidden !important; }\n`;
+    if ((prefs.headerPreset && prefs.headerPreset !== 'default') || prefs.headerText) {
+      css += `${headerSelector} { position: relative !important; overflow: hidden !important; }\n`;
+    }
     css += `.${BANNER_ID} { position: absolute !important; left: 24px !important; bottom: 18px !important; right: 24px !important; z-index: 20 !important; font-size: 0.95rem !important; font-weight: 600 !important; color: #ffffff !important; text-shadow: 0 1px 8px rgba(0,0,0,0.45) !important; }\n`;
     css += `.${BANNER_ID}.hidden { display: none !important; }\n`;
 
