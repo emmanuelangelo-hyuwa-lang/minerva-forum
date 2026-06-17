@@ -1,6 +1,19 @@
 (function () {
   const STYLE_ID = 'minerva-forum-customizer-styles';
   const BANNER_ID = 'minerva-customizer-banner-text';
+  const CALENDAR_FEED_SELECTOR = '.body-s.input-0-2-74.input-d0-0-2-76';
+  const HEADER_IMAGES = {
+    africa: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1800&q=80',
+    americas: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80',
+    asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1800&q=80',
+    europe: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1800&q=80',
+    'latin-america': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1800&q=80'
+  };
+  const minervaHeaderImage = Object.values(HEADER_IMAGES)[Math.floor(Math.random() * Object.values(HEADER_IMAGES).length)];
+
+  function cssUrl(value) {
+    return String(value || '').replace(/["\\\n\r]/g, '');
+  }
 
   function buildCSS(prefs, headerImage) {
     const scale = Number(prefs.fontSize) || 1.0;
@@ -79,43 +92,33 @@
     css += '}\n\n';
 
     const headerSelector = 'header#header, .subheader';
+    const imagerySelector = 'div.imagery';
     if (prefs.headerPreset === 'custom' && headerImage) {
-      css += `${headerSelector} { background-image: url("${headerImage}") !important; background-size: cover !important; background-position: center center !important; }\n`;
-      css += `${headerSelector}::after { content: '' !important; position: absolute !important; inset: 0 !important; background: rgba(0,0,0,0.16) !important; pointer-events: none !important; }\n`;
+      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.08), rgba(0,0,0,0.08)), url("${cssUrl(headerImage)}") !important; background-size: cover !important; background-position: center center !important; }\n`;
     } else if (prefs.headerPreset === 'minerva') {
-      css += `${headerSelector} { background: linear-gradient(135deg, #2b4c6f, #1a2f4c) !important; }\n`;
-    } else if (prefs.headerPreset === 'africa') {
-      css += `${headerSelector} { background: linear-gradient(135deg, #6b3e1f, #e7b676) !important; }\n`;
-    } else if (prefs.headerPreset === 'americas') {
-      css += `${headerSelector} { background: linear-gradient(135deg, #284b70, #7cc1d9) !important; }\n`;
-    } else if (prefs.headerPreset === 'asia') {
-      css += `${headerSelector} { background: linear-gradient(135deg, #6f2e5d, #d991c8) !important; }\n`;
-    } else if (prefs.headerPreset === 'europe') {
-      css += `${headerSelector} { background: linear-gradient(135deg, #31415c, #89a3cc) !important; }\n`;
-    } else if (prefs.headerPreset === 'latin-america') {
-      css += `${headerSelector} { background: linear-gradient(135deg, #254d33, #8fc08f) !important; }\n`;
-    } else {
-      css += `${headerSelector} { background-image: none !important; }\n`;
+      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url("${minervaHeaderImage}") !important; background-size: cover !important; background-position: center center !important; }\n`;
+    } else if (HEADER_IMAGES[prefs.headerPreset]) {
+      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url("${HEADER_IMAGES[prefs.headerPreset]}") !important; background-size: cover !important; background-position: center center !important; }\n`;
     }
 
     css += `${headerSelector} { position: relative !important; overflow: hidden !important; }\n`;
     css += `.${BANNER_ID} { position: absolute !important; left: 24px !important; bottom: 18px !important; right: 24px !important; z-index: 20 !important; font-size: 0.95rem !important; font-weight: 600 !important; color: #ffffff !important; text-shadow: 0 1px 8px rgba(0,0,0,0.45) !important; }\n`;
     css += `.${BANNER_ID}.hidden { display: none !important; }\n`;
 
-    if (prefs.compactSidebar) {
-      css += 'aside.sidebar { width: 56px !important; min-width: 56px !important; max-width: 56px !important; }\n';
-      css += 'aside.sidebar span.link-text { display: none !important; }\n';
-      css += 'aside.sidebar .svg-icon { margin-right: 0 !important; }\n';
-    }
-
     if (prefs.roundedCards) {
       css += 'table.fds-table, .fds-card, .office-hours-region .card, .announcement-region .card, .home-view-right-column > div { border-radius: 14px !important; overflow: hidden !important; }\n';
     }
 
     if (prefs.theme === 'charcoal' || prefs.theme === 'high-contrast') {
-      css += `${headerSelector}, aside.sidebar, article#main-semantic-content, .announcement-region, .office-hours-region { background-color: var(--black) !important; color: var(--white) !important; }\n`;
-      css += `header#header a, .navigation-link, .link-text, .subheader, .subheader * { color: var(--white) !important; }\n`;
-      css += `button, select, input, .fds-card { color: var(--white) !important; }\n`;
+      css += `body#minerva-dashboard, section.main-region, .dashboard-layout, .main-wrapper, article#main-semantic-content, article#main-semantic-content .content, .react-router-content { background-color: var(--black-tint-10) !important; color: var(--white) !important; }\n`;
+      css += `${headerSelector}, aside.sidebar, .announcement-region, .announcements-region, .office-hours-region, table.fds-table, .fds-card, .home-view-right-column > div, .assignments-list-view, .past-sections-view { background-color: var(--black-tint-20) !important; color: var(--white) !important; border-color: var(--black-tint-40) !important; }\n`;
+      css += `header#header a, .navigation-link, .link-text, .subheader, .subheader *, article#main-semantic-content a, table.fds-table th, table.fds-table td { color: var(--white) !important; }\n`;
+      css += `button, select, input, textarea, .react-select__control, .react-select__menu { background-color: var(--black-tint-20) !important; color: var(--white) !important; border-color: var(--black-tint-40) !important; }\n`;
+      css += `tr.assignment-item-view:hover, tr.recently-graded-item-view:hover, li.sidebar-item-view.active a.navigation-link, .navigation-link:hover { background-color: var(--black-tint-40) !important; }\n`;
+    } else if (prefs.theme === 'warm' || prefs.theme === 'warm-copper' || prefs.theme === 'warm-sand') {
+      css += `body#minerva-dashboard, section.main-region, .dashboard-layout, .main-wrapper, article#main-semantic-content, article#main-semantic-content .content, .react-router-content { background-color: var(--black-tint-97) !important; }\n`;
+      css += `header#header, aside.sidebar { border-color: var(--blue) !important; }\n`;
+      css += `li.sidebar-item-view.active a.navigation-link, .navigation-link:hover, tr.assignment-item-view:hover, tr.recently-graded-item-view:hover { background-color: var(--blue-tint-90) !important; }\n`;
     }
 
     return css;
@@ -150,10 +153,24 @@
     const headerImage = prefs.headerPreset === 'custom' ? await window.MinervaStorage.loadHeaderImage() : null;
     applyStyle(prefs, headerImage);
     ensureBanner(prefs);
-    if (prefs.compactSidebar) {
-      const sidebar = document.querySelector('aside.sidebar');
-      if (sidebar) sidebar.style.transition = 'width 180ms ease';
+  }
+
+  function findCalendarFeedLink() {
+    const exactInput = document.querySelector(CALENDAR_FEED_SELECTOR);
+    const candidates = [
+      exactInput,
+      ...document.querySelectorAll('input[readonly], input[type="text"], input.body-s, textarea, code')
+    ].filter(Boolean);
+
+    for (const node of candidates) {
+      const value = node.value || node.getAttribute('value') || node.textContent || node.innerHTML || '';
+      const trimmed = value.trim();
+      if (/^https?:\/\//i.test(trimmed) || /^webcal:\/\//i.test(trimmed)) {
+        return trimmed;
+      }
     }
+
+    return null;
   }
 
   function watchNavigation(prefs) {
@@ -172,11 +189,17 @@
     await refresh(prefs);
     watchNavigation(prefs);
 
-    chrome.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
+    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message && message.type === 'UPDATE_PREFS' && message.prefs) {
-        await refresh(message.prefs);
-        sendResponse({ ok: true });
+        refresh(message.prefs).then(() => {
+          sendResponse({ ok: true });
+        });
+        return true;
+      } else if (message && message.type === 'GET_CALENDAR_LINK') {
+        const link = findCalendarFeedLink();
+        sendResponse(link ? { ok: true, link } : { ok: false, error: 'Calendar feed link not found on this page.' });
       }
+      return false;
     });
 
     chrome.storage.onChanged.addListener(async (changes, area) => {

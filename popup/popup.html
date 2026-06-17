@@ -80,8 +80,13 @@
           <input id="header-text" type="text" placeholder="Start your day with a quote..." />
         </label>
 
-        <label class="checkbox-label"><input id="compact-sidebar" type="checkbox" /> Compact sidebar</label>
         <label class="checkbox-label"><input id="rounded-cards" type="checkbox" /> Rounded UI (sidebar + cards/panels)</label>
+
+        <div class="calendar-section">
+          <p class="instruction">Copy the CalDAV feed link and add it to your calendar application.</p>
+          <button id="copy-calendar-btn" class="secondary-button" type="button">Copy calendar link</button>
+          <p id="calendar-status" class="status-message" role="status" aria-live="polite"></p>
+        </div>
 
         <div class="actions">
           <button id="reset-btn">Reset</button>
