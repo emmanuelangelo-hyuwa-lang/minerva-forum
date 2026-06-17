@@ -10,6 +10,7 @@
     'latin-america': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1800&q=80'
   };
   const minervaHeaderImage = Object.values(HEADER_IMAGES)[Math.floor(Math.random() * Object.values(HEADER_IMAGES).length)];
+  let currentPrefs = null;
 
   function cssUrl(value) {
     return String(value || '').replace(/["\\\n\r]/g, '');
@@ -175,25 +176,26 @@
     return null;
   }
 
-  function watchNavigation(prefs) {
+  function watchNavigation() {
     const target = document.querySelector('.react-router-content') || document.querySelector('.content') || document.body;
     if (!target) return;
 
     const observer = new MutationObserver(() => {
-      refresh(prefs);
+      if (currentPrefs) refresh(currentPrefs);
     });
 
     observer.observe(target, { childList: true, subtree: true });
   }
 
   async function init() {
-    const prefs = await window.MinervaStorage.loadPrefs();
-    await refresh(prefs);
-    watchNavigation(prefs);
+    currentPrefs = await window.MinervaStorage.loadPrefs();
+    await refresh(currentPrefs);
+    watchNavigation();
 
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message && message.type === 'UPDATE_PREFS' && message.prefs) {
-        refresh(message.prefs).then(() => {
+        currentPrefs = message.prefs;
+        refresh(currentPrefs).then(() => {
           sendResponse({ ok: true });
         });
         return true;
@@ -206,11 +208,11 @@
 
     chrome.storage.onChanged.addListener(async (changes, area) => {
       if (area === 'sync' && changes.minervaPrefs) {
-        const newPrefs = Object.assign({}, window.MINERVA_DEFAULT_PREFS, changes.minervaPrefs.newValue || {});
-        await refresh(newPrefs);
+        currentPrefs = Object.assign({}, window.MINERVA_DEFAULT_PREFS, changes.minervaPrefs.newValue || {});
+        await refresh(currentPrefs);
       } else if (area === 'local' && changes.minervaHeaderImage) {
-        const prefs = await window.MinervaStorage.loadPrefs();
-        await refresh(prefs);
+        currentPrefs = await window.MinervaStorage.loadPrefs();
+        await refresh(currentPrefs);
       }
     });
   }
