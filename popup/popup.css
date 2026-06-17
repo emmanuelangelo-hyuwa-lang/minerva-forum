@@ -29,7 +29,9 @@ label {
 }
 select,
 input[type="color"],
-input[type="range"] {
+input[type="range"],
+input[type="text"],
+input[type="file"] {
   width: 100%;
   margin-top: 6px;
   border-radius: 10px;
@@ -73,11 +75,33 @@ button {
 button:hover {
   background: #e2e7f0;
 }
+.secondary-button {
+  width: 100%;
+}
 .panel {
   background: #ffffff;
   border-radius: 22px;
   padding: 18px 20px;
   box-shadow: 0 24px 48px rgba(38, 53, 77, 0.12);
+}
+.calendar-section {
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 14px;
+}
+.instruction {
+  margin: 0;
+  color: #3f4650;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+.status-message {
+  min-height: 18px;
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 .small-note {
   color: #6a6f77;
