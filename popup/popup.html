@@ -12,65 +12,86 @@
         <div class="header-row">
           <div>
             <h2>Minerva Customizer</h2>
-            <p class="subtitle">Personalize Minerva Forum with safer local style overrides.</p>
+            <p class="subtitle">A friendlier theme tool for Minerva Forum.</p>
           </div>
         </div>
 
         <label>Theme
           <select id="theme-select">
             <option value="default">Default</option>
-            <option value="dark">Dark</option>
+            <option value="charcoal">Charcoal</option>
             <option value="high-contrast">High Contrast</option>
             <option value="warm">Warm</option>
+            <option value="warm-copper">Warm Copper</option>
+            <option value="warm-sand">Warm Sand</option>
           </select>
         </label>
 
-      <label>Body Font
-        <select id="font-select">
-          <option value="default">Default</option>
-          <option value="Inter">Inter</option>
-          <option value="system-ui">System UI</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Roboto">Roboto</option>
-          <option value="Arial">Arial</option>
-          <option value="Fira Sans">Fira Sans</option>
-          <option value="Courier New">Courier New</option>
-        </select>
-      </label>
+        <label>Body Font
+          <select id="font-select">
+            <option value="default">Default</option>
+            <option value="Inter">Inter</option>
+            <option value="system-ui">System UI</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Arial">Arial</option>
+            <option value="Fira Sans">Fira Sans</option>
+            <option value="Courier New">Courier New</option>
+          </select>
+        </label>
 
-      <label>Heading Font
-        <select id="heading-font-select">
-          <option value="default">Default</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Chronicle Deck A">Chronicle Deck A</option>
-          <option value="Inter">Inter</option>
-          <option value="Roboto Slab">Roboto Slab</option>
-          <option value="Times New Roman">Times New Roman</option>
-        </select>
-      </label>
+        <label>Heading Font
+          <select id="heading-font-select">
+            <option value="default">Default</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Chronicle Deck A">Chronicle Deck A</option>
+            <option value="Inter">Inter</option>
+            <option value="Roboto Slab">Roboto Slab</option>
+            <option value="Times New Roman">Times New Roman</option>
+          </select>
+        </label>
 
-      <label>Font size: <span id="font-size-label">100%</span>
-        <input id="font-size" type="range" min="0.8" max="1.3" step="0.01" value="1.0">
-      </label>
+        <label>Font size: <span id="font-size-label">100%</span>
+          <input id="font-size" type="range" min="0.8" max="1.3" step="0.01" value="1.0" />
+        </label>
 
-      <label>Accent color
-        <input id="accent-color" type="color" value="#0A78BF">
-      </label>
+        <label>Accent color
+          <input id="accent-color" type="color" value="#0A78BF" />
+        </label>
 
-      <label class="checkbox-label"><input id="hide-imagery" type="checkbox"> Hide cityscape imagery</label>
-      <label class="checkbox-label"><input id="compact-sidebar" type="checkbox"> Compact sidebar</label>
-      <label class="checkbox-label"><input id="rounded-cards" type="checkbox"> Rounded UI (sidebar + cards/panels)</label>
-      <label class="checkbox-label"><input id="hide-intercom" type="checkbox"> Hide Intercom chat (when present)</label>
+        <label>Header backdrop
+          <select id="header-preset">
+            <option value="default">Default</option>
+            <option value="minerva">Minerva Mode</option>
+            <option value="africa">Africa</option>
+            <option value="americas">Americas</option>
+            <option value="asia">Asia</option>
+            <option value="europe">Europe</option>
+            <option value="latin-america">Latin America</option>
+            <option value="custom">Custom upload</option>
+          </select>
+        </label>
 
-      <div class="actions">
-        <button id="reset-btn">Reset</button>
+        <label>Upload header image
+          <input id="header-upload" type="file" accept="image/*" />
+        </label>
+
+        <label>Banner message
+          <input id="header-text" type="text" placeholder="Start your day with a quote..." />
+        </label>
+
+        <label class="checkbox-label"><input id="compact-sidebar" type="checkbox" /> Compact sidebar</label>
+        <label class="checkbox-label"><input id="rounded-cards" type="checkbox" /> Rounded UI (sidebar + cards/panels)</label>
+
+        <div class="actions">
+          <button id="reset-btn">Reset</button>
+        </div>
+        <p class="small-note">Upload recommended image aspect ratio: 16:5. Custom image replaces the preset backdrop.</p>
       </div>
-      <p class="small-note">The Intercom toggle hides the chat widget if Minerva loads it. If the button doesn’t change anything, the chat is not present on that page.</p>
     </div>
-  </div>
 
-  <script src="../utils/defaults.js"></script>
-  <script src="../utils/storage.js"></script>
-  <script src="popup.js"></script>
+    <script src="../utils/defaults.js"></script>
+    <script src="../utils/storage.js"></script>
+    <script src="popup.js"></script>
   </body>
 </html>

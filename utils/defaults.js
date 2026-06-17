@@ -6,8 +6,8 @@ window.MINERVA_DEFAULT_PREFS = {
   headingFont: 'default',
   fontSize: 1.0,
   accentColor: null,
-  hideImagery: false,
+  headerPreset: 'default',
+  headerText: '',
   compactSidebar: false,
-  roundedCards: false,
-  hideIntercom: true
+  roundedCards: false
 };
