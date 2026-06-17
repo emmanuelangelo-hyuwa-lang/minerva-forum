@@ -1,5 +1,6 @@
 (function () {
   const $ = (id) => document.getElementById(id);
+  let eventsBound = false;
 
   const themeSelect = $('theme-select');
   const fontSelect = $('font-select');
@@ -10,8 +11,9 @@
   const headerPreset = $('header-preset');
   const headerUpload = $('header-upload');
   const headerText = $('header-text');
-  const compactSidebar = $('compact-sidebar');
   const roundedCards = $('rounded-cards');
+  const copyCalendarBtn = $('copy-calendar-btn');
+  const calendarStatus = $('calendar-status');
   const resetBtn = $('reset-btn');
 
   async function init() {
@@ -25,17 +27,20 @@
     accentColor.value = prefs.accentColor || '#0A78BF';
     headerPreset.value = prefs.headerPreset || 'default';
     headerText.value = prefs.headerText || '';
-    compactSidebar.checked = !!prefs.compactSidebar;
     roundedCards.checked = !!prefs.roundedCards;
 
     bindEvents();
   }
 
   function bindEvents() {
-    [themeSelect, fontSelect, headingFontSelect, fontSize, accentColor, headerPreset, headerText, compactSidebar, roundedCards]
+    if (eventsBound) return;
+    eventsBound = true;
+
+    [themeSelect, fontSelect, headingFontSelect, fontSize, accentColor, headerPreset, headerText, roundedCards]
       .forEach((control) => control.addEventListener('change', onChange));
     headerText.addEventListener('input', onChange);
     headerUpload.addEventListener('change', onUpload);
+    copyCalendarBtn.addEventListener('click', onCopyCalendarLink);
     resetBtn.addEventListener('click', onReset);
   }
 
@@ -48,7 +53,6 @@
       accentColor: accentColor.value,
       headerPreset: headerPreset.value,
       headerText: headerText.value,
-      compactSidebar: compactSidebar.checked,
       roundedCards: roundedCards.checked
     };
   }
@@ -79,6 +83,53 @@
       await onChange();
     };
     reader.readAsDataURL(file);
+  }
+
+  function writeClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.select();
+    const copied = document.execCommand('copy');
+    textArea.remove();
+    return copied ? Promise.resolve() : Promise.reject(new Error('Clipboard copy failed.'));
+  }
+
+  async function onCopyCalendarLink() {
+    calendarStatus.textContent = 'Looking for calendar link...';
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs || !tabs[0] || !tabs[0].id) {
+        calendarStatus.textContent = 'Open Minerva Forum and try again.';
+        return;
+      }
+
+      chrome.tabs.sendMessage(tabs[0].id, { type: 'GET_CALENDAR_LINK' }, async (response) => {
+        if (chrome.runtime.lastError) {
+          calendarStatus.textContent = 'Open the calendar feed page in Minerva Forum first.';
+          return;
+        }
+
+        if (!response || !response.ok || !response.link) {
+          calendarStatus.textContent = (response && response.error) || 'Calendar feed link not found on this page.';
+          return;
+        }
+
+        try {
+          await writeClipboard(response.link);
+          calendarStatus.textContent = 'Calendar link copied.';
+        } catch (error) {
+          calendarStatus.textContent = 'Could not copy the link automatically.';
+        }
+      });
+    });
   }
 
   async function onReset() {
