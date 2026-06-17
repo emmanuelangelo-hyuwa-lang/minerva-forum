@@ -7,10 +7,11 @@
   const fontSize = $('font-size');
   const fontSizeLabel = $('font-size-label');
   const accentColor = $('accent-color');
-  const hideImagery = $('hide-imagery');
+  const headerPreset = $('header-preset');
+  const headerUpload = $('header-upload');
+  const headerText = $('header-text');
   const compactSidebar = $('compact-sidebar');
   const roundedCards = $('rounded-cards');
-  const hideIntercom = $('hide-intercom');
   const resetBtn = $('reset-btn');
 
   async function init() {
@@ -22,17 +23,19 @@
     fontSize.value = prefs.fontSize || 1.0;
     fontSizeLabel.textContent = Math.round((prefs.fontSize || 1.0) * 100) + '%';
     accentColor.value = prefs.accentColor || '#0A78BF';
-    hideImagery.checked = !!prefs.hideImagery;
+    headerPreset.value = prefs.headerPreset || 'default';
+    headerText.value = prefs.headerText || '';
     compactSidebar.checked = !!prefs.compactSidebar;
     roundedCards.checked = !!prefs.roundedCards;
-    hideIntercom.checked = prefs.hideIntercom !== false;
 
     bindEvents();
   }
 
   function bindEvents() {
-    [themeSelect, fontSelect, headingFontSelect, fontSize, accentColor, hideImagery, compactSidebar, roundedCards, hideIntercom]
+    [themeSelect, fontSelect, headingFontSelect, fontSize, accentColor, headerPreset, headerText, compactSidebar, roundedCards]
       .forEach((control) => control.addEventListener('change', onChange));
+    headerText.addEventListener('input', onChange);
+    headerUpload.addEventListener('change', onUpload);
     resetBtn.addEventListener('click', onReset);
   }
 
@@ -43,10 +46,10 @@
       headingFont: headingFontSelect.value,
       fontSize: Number(fontSize.value),
       accentColor: accentColor.value,
-      hideImagery: hideImagery.checked,
+      headerPreset: headerPreset.value,
+      headerText: headerText.value,
       compactSidebar: compactSidebar.checked,
-      roundedCards: roundedCards.checked,
-      hideIntercom: hideIntercom.checked
+      roundedCards: roundedCards.checked
     };
   }
 
@@ -64,8 +67,23 @@
     sendUpdate(prefs);
   }
 
+  async function onUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = async (loadEvent) => {
+      const imageData = loadEvent.target.result;
+      await window.MinervaStorage.saveHeaderImage(imageData);
+      headerPreset.value = 'custom';
+      await onChange();
+    };
+    reader.readAsDataURL(file);
+  }
+
   async function onReset() {
     await window.MinervaStorage.savePrefs(window.MINERVA_DEFAULT_PREFS);
+    await window.MinervaStorage.saveHeaderImage(null);
     init();
     sendUpdate(window.MINERVA_DEFAULT_PREFS);
   }
