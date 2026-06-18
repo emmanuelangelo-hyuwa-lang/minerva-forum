@@ -39,81 +39,81 @@
   };
   const THEMES = {
     charcoal: {
-      bg: '#07090d',
-      panel: '#121821',
-      panelAlt: '#1f2937',
-      text: '#f5f7fb',
-      muted: '#9aa4b2',
-      line: '#344052',
-      accent: '#00c2ff',
-      accentSoft: '#063242',
-      hover: '#263449'
+      bg: '#eef3f8',
+      panel: '#f8fafc',
+      panelAlt: '#dbe7f3',
+      text: '#1b2633',
+      muted: '#53677c',
+      line: '#9db2c8',
+      accent: '#245f8f',
+      accentSoft: '#d6e7f5',
+      hover: '#c9dcec'
     },
     highContrast: {
-      bg: '#000000',
-      panel: '#080808',
-      panelAlt: '#171717',
-      text: '#ffffff',
-      muted: '#e5e5e5',
-      line: '#ffffff',
-      accent: '#ffd500',
-      accentSoft: '#3a3100',
-      hover: '#242424'
+      bg: '#f4f4f0',
+      panel: '#ffffff',
+      panelAlt: '#e4e1d6',
+      text: '#111111',
+      muted: '#4b4b43',
+      line: '#88816c',
+      accent: '#846400',
+      accentSoft: '#fff1ad',
+      hover: '#ece4bf'
     },
     forest: {
-      bg: '#06130d',
-      panel: '#0d2418',
-      panelAlt: '#163824',
-      text: '#f1fff6',
-      muted: '#a9c7b4',
-      line: '#2f6b47',
-      accent: '#2ee66b',
-      accentSoft: '#123d22',
-      hover: '#1e4d31'
+      bg: '#edf6ef',
+      panel: '#f8fcf8',
+      panelAlt: '#d5ead9',
+      text: '#183522',
+      muted: '#4f705b',
+      line: '#91b69b',
+      accent: '#2c7040',
+      accentSoft: '#d8eddd',
+      hover: '#c9e2d0'
     },
     burgundy: {
-      bg: '#18040b',
-      panel: '#2b0714',
-      panelAlt: '#461024',
-      text: '#fff4f7',
-      muted: '#e3a8ba',
-      line: '#74314b',
-      accent: '#ff3d7f',
-      accentSoft: '#4d1028',
-      hover: '#5a1730'
+      bg: '#f8eef2',
+      panel: '#fff9fb',
+      panelAlt: '#efd2dc',
+      text: '#3c1724',
+      muted: '#7c5160',
+      line: '#c295a5',
+      accent: '#9a2f55',
+      accentSoft: '#f2dce5',
+      hover: '#e8c9d5'
     },
     ultraviolet: {
-      bg: '#11051d',
-      panel: '#25113a',
-      panelAlt: '#3d1f5f',
-      text: '#fbf6ff',
-      muted: '#c9aee5',
-      line: '#69429a',
-      accent: '#b56cff',
-      accentSoft: '#351a56',
-      hover: '#4f2a78'
+      bg: '#f3effa',
+      panel: '#fbf9ff',
+      panelAlt: '#ded2f2',
+      text: '#2a1d40',
+      muted: '#66537e',
+      line: '#a996ca',
+      accent: '#684aa0',
+      accentSoft: '#e7dcf8',
+      hover: '#d9ccee'
     },
     ocean: {
-      bg: '#03151d',
-      panel: '#082a38',
-      panelAlt: '#0d4557',
-      text: '#f0fbff',
-      muted: '#99c9d8',
-      line: '#217086',
-      accent: '#00d7d7',
-      accentSoft: '#073f48',
-      hover: '#105668'
+      bg: '#edf7f8',
+      panel: '#f7fcfd',
+      panelAlt: '#cee8ec',
+      text: '#12343b',
+      muted: '#4d7078',
+      line: '#8bb7bf',
+      accent: '#1c7585',
+      accentSoft: '#d5eef2',
+      hover: '#c4e1e7'
     },
     ember: {
-      bg: '#1b0902',
-      panel: '#351307',
-      panelAlt: '#57200d',
-      text: '#fff7f2',
-      muted: '#e6ad8f',
-      line: '#89401c',
-      accent: '#ff6a1a',
-      accentSoft: '#55220c',
-      hover: '#682a10'
+      bg: '#fbf0e8',
+      panel: '#fffaf6',
+      panelAlt: '#f1d8c8',
+      text: '#3b2014',
+      muted: '#7c5a49',
+      line: '#c9a08a',
+      accent: '#9b4f22',
+      accentSoft: '#f5dfd0',
+      hover: '#eccfbd'
     }
   };
   const HEADER_IMAGES = {
@@ -184,11 +184,11 @@
     }
 
     if (theme) {
-      css += `  --black: ${theme.bg} !important;\n`;
-      css += `  --white: ${theme.text} !important;\n`;
-      css += `  --black-tint-10: ${theme.bg} !important;\n`;
-      css += `  --black-tint-20: ${theme.panel} !important;\n`;
-      css += `  --black-tint-40: ${theme.line} !important;\n`;
+      css += `  --black: ${theme.text} !important;\n`;
+      css += '  --white: #ffffff !important;\n';
+      css += `  --black-tint-10: ${theme.text} !important;\n`;
+      css += `  --black-tint-20: ${theme.text} !important;\n`;
+      css += `  --black-tint-40: ${theme.muted} !important;\n`;
       css += `  --black-tint-70: ${theme.muted} !important;\n`;
       css += `  --black-tint-90: ${theme.panelAlt} !important;\n`;
       css += `  --black-tint-95: ${theme.panel} !important;\n`;
@@ -229,20 +229,22 @@
 
     if (prefs.roundedCards) {
       css += `${appRootSelector} { --border-radius: 16px !important; }\n`;
-      css += `${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .office-hours-region .card, ${appSelector} .announcement-region .card, ${appSelector} .announcements-region, ${appSelector} .office-hours-region, ${appSelector} .home-view-right-column > div, ${appSelector} .root-0-2-3, ${appSelector} .student-assignments-list-view, ${appSelector} .assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .h2.mb5, ${appSelector} aside.sidebar, ${appSelector} .dashboard-control-center-view, ${appSelector} .menu-view .menu-items, ${appSelector} .profile-photo-medium, ${appSelector} .circle-button--transparent { border-radius: 16px !important; overflow: hidden !important; }\n`;
-      css += `${appSelector} input:not([type="checkbox"]):not([type="radio"]), ${appSelector} textarea, ${appSelector} select, ${appSelector} [contenteditable="true"], ${appSelector} .title-search, ${appSelector} [class*="title-search"], ${appSelector} [class*="react-select__control"], ${appSelector} .react-select__control, ${appSelector} [class*="-control"], ${appSelector} [class*="value-container"], ${appSelector} [id$="-select"] > div, ${appSelector} [id$="-select"] [class*="container"], ${appSelector} [data-testid="Box"] > input + div, ${appSelector} .show-submitted-checkbox label > div:first-of-type { border-radius: 16px !important; overflow: hidden !important; }\n`;
-      css += `${appSelector} [class*="react-select__control"], ${appSelector} .react-select__control, ${appSelector} .title-search, ${appSelector} [class*="title-search"] { min-height: 38px !important; }\n`;
+      css += `${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .office-hours-region .card, ${appSelector} .announcement-region .card, ${appSelector} .home-view-right-column > div, ${appSelector} .student-assignments-list-view, ${appSelector} .assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .dashboard-module.js-rubric-key, ${appSelector} .root-d3-0-2-10, ${appSelector} .root-d14-0-2-63, ${appSelector} .root-d5-0-2-62, ${appSelector} .root-d38-0-2-108, ${appSelector} .root-d9-0-2-107, ${appSelector} .root-d39-0-2-110, ${appSelector} .root-d10-0-2-109, ${appSelector} .root-d41-0-2-113, ${appSelector} .h2.mb5, ${appSelector} aside.sidebar, ${appSelector} .dashboard-control-center-view, ${appSelector} .menu-view .menu-items, ${appSelector} .profile-photo-medium, ${appSelector} .circle-button--transparent { border-radius: 16px !important; overflow: hidden !important; }\n`;
       css += '.profile-photo-medium, .circle-button--transparent { border-radius: 999px !important; }\n';
     }
 
     if (theme) {
-      css += `${appSelector}, ${appSelector} > .main-region, ${appSelector} section.main-region, ${appSelector} .dashboard-layout, ${appSelector} .main-wrapper, ${appSelector} .content-wrapper, ${appSelector} .stage-wrapper, ${appSelector} article#main-semantic-content, ${appSelector} article#main-semantic-content .content, ${appSelector} .react-router-content { background-color: var(--black-tint-10) !important; color: var(--white) !important; }\n`;
-      css += `${scopedHeaderSelector}, ${appSelector} aside.sidebar, ${appSelector} .announcement-region, ${appSelector} .announcements-region, ${appSelector} .office-hours-region, ${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .home-view-right-column > div, ${appSelector} .assignments-list-view, ${appSelector} .student-assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .root-0-2-3 { background-color: var(--black-tint-20) !important; color: var(--white) !important; border-color: var(--black-tint-40) !important; }\n`;
-      css += `${appSelector} .text-black-tint-20, ${appSelector} .text-black-tint-40, ${appSelector} .text-black-tint-70, ${appSelector} .text-black-tint-90, ${appSelector} .body, ${appSelector} .body-s, ${appSelector} .body-xs, ${appSelector} .h1, ${appSelector} .h2, ${appSelector} .h3, ${appSelector} .h4, ${appSelector} .h5, ${appSelector} .h6, ${appSelector} header#header a, ${appSelector} .navigation-link, ${appSelector} .link-text, ${appSelector} .subheader, ${appSelector} .subheader *, ${appSelector} article#main-semantic-content a, ${appSelector} table.fds-table th, ${appSelector} table.fds-table td, ${appSelector} .root-0-2-3 * { color: var(--white) !important; }\n`;
-      css += `${appSelector} button, ${appSelector} select, ${appSelector} input, ${appSelector} textarea, ${appSelector} [contenteditable="true"], ${appSelector} .react-select__control, ${appSelector} [class*="react-select__control"], ${appSelector} .react-select__menu, ${appSelector} [class*="-menu"], ${appSelector} .title-search { background-color: var(--black-tint-20) !important; color: var(--white) !important; border-color: var(--black-tint-40) !important; }\n`;
-      css += `${appSelector} .react-select__single-value, ${appSelector} .react-select__placeholder, ${appSelector} [class*="singleValue"], ${appSelector} [class*="placeholder"] { color: var(--white) !important; }\n`;
+      css += `${appSelector}, ${appSelector} > .main-region, ${appSelector} .dashboard-layout, ${appSelector} .main-wrapper, ${appSelector} .content-wrapper, ${appSelector} .stage-wrapper, ${appSelector} article#main-semantic-content, ${appSelector} article#main-semantic-content .content, ${appSelector} .react-router-content { background-color: ${theme.bg} !important; color: ${theme.text} !important; }\n`;
+      css += `${appSelector} aside.sidebar, ${appSelector} .announcement-region, ${appSelector} .announcements-region, ${appSelector} .office-hours-region, ${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .home-view-right-column > div, ${appSelector} .assignments-list-view, ${appSelector} .student-assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .dashboard-module.js-rubric-key { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
+      css += `${appSelector} table.fds-table th { background-color: ${theme.accentSoft} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
+      css += `${appSelector} table.fds-table td { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
+      css += `${appSelector} .text-black-tint-20, ${appSelector} .text-black-tint-40, ${appSelector} .body, ${appSelector} .body-s, ${appSelector} .body-xs, ${appSelector} article#main-semantic-content, ${appSelector} article#main-semantic-content p, ${appSelector} article#main-semantic-content span, ${appSelector} article#main-semantic-content div { color: ${theme.text} !important; }\n`;
+      css += `${appSelector} .text-black-tint-70, ${appSelector} .text-black-tint-90, ${appSelector} footer, ${appSelector} footer * { color: ${theme.muted} !important; }\n`;
+      css += `${appSelector} article#main-semantic-content a, ${appSelector} .navigation-link, ${appSelector} .link-text { color: ${theme.accent} !important; }\n`;
+      css += `${appSelector} button, ${appSelector} select, ${appSelector} input, ${appSelector} textarea, ${appSelector} [contenteditable="true"], ${appSelector} .react-select__control, ${appSelector} [class*="react-select__control"], ${appSelector} .react-select__menu, ${appSelector} [class*="-menu"], ${appSelector} .title-search { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
+      css += `${appSelector} .react-select__single-value, ${appSelector} .react-select__placeholder, ${appSelector} [class*="singleValue"], ${appSelector} [class*="placeholder"] { color: ${theme.text} !important; }\n`;
       css += `${appSelector} tr.assignment-item-view:hover, ${appSelector} tr.recently-graded-item-view:hover, ${appSelector} li.sidebar-item-view.active a.navigation-link, ${appSelector} .navigation-link:hover { background-color: ${theme.hover} !important; }\n`;
-      css += `${appSelector} .status-wrapper.status-red { background-color: #7f1d1d !important; color: #fff7ed !important; border-color: #ef4444 !important; }\n`;
+      css += `${appSelector} .status-wrapper.status-red { background-color: #f8d7da !important; color: #8a1f2d !important; border-color: #d88b96 !important; }\n`;
     }
 
     return css;
