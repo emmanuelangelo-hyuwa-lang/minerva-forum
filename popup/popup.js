@@ -15,13 +15,33 @@
   const copyCalendarBtn = $('copy-calendar-btn');
   const calendarStatus = $('calendar-status');
   const resetBtn = $('reset-btn');
+  const LEGACY_VALUES = {
+    theme: {
+      warm: 'ember',
+      'warm-copper': 'ember',
+      'warm-sand': 'forest',
+      midnight: 'charcoal'
+    },
+    font: {
+      Inter: 'verdana',
+      'system-ui': 'verdana',
+      Roboto: 'optima',
+      Arial: 'trebuchet',
+      'Fira Sans': 'optima',
+      Georgia: 'georgia',
+      'Courier New': 'mono',
+      'Chronicle Deck A': 'baskerville',
+      'Roboto Slab': 'palatino',
+      'Times New Roman': 'garamond'
+    }
+  };
 
   async function init() {
     const prefs = await window.MinervaStorage.loadPrefs();
 
-    themeSelect.value = prefs.theme || 'default';
-    fontSelect.value = prefs.fontFamily || 'default';
-    headingFontSelect.value = prefs.headingFont || 'default';
+    themeSelect.value = normalizeSelectValue(themeSelect, LEGACY_VALUES.theme[prefs.theme] || prefs.theme || 'default');
+    fontSelect.value = normalizeSelectValue(fontSelect, LEGACY_VALUES.font[prefs.fontFamily] || prefs.fontFamily || 'default');
+    headingFontSelect.value = normalizeSelectValue(headingFontSelect, LEGACY_VALUES.font[prefs.headingFont] || prefs.headingFont || 'default');
     fontSize.value = prefs.fontSize || 1.0;
     fontSizeLabel.textContent = Math.round((prefs.fontSize || 1.0) * 100) + '%';
     accentColor.value = prefs.accentColor || '#0A78BF';
@@ -30,6 +50,10 @@
     roundedCards.checked = !!prefs.roundedCards;
 
     bindEvents();
+  }
+
+  function normalizeSelectValue(select, value) {
+    return Array.from(select.options).some((option) => option.value === value) ? value : 'default';
   }
 
   function bindEvents() {
