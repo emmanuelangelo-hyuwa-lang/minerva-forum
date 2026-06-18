@@ -1,7 +1,5 @@
 (function () {
   const STYLE_ID = 'minerva-forum-customizer-styles';
-  const BANNER_ID = 'minerva-customizer-banner-text';
-  const CALENDAR_FEED_SELECTOR = '.body-s.input-0-2-74.input-d0-0-2-76';
   const STYLE_SOURCE = 'minerva-forum-customizer';
   const FONT_STACKS = {
     default: null,
@@ -117,11 +115,11 @@
     }
   };
   const HEADER_IMAGES = {
-    africa: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1800&q=80',
-    americas: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1800&q=80',
-    asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1800&q=80',
-    europe: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1800&q=80',
-    'latin-america': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1800&q=80'
+    africa: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1600&h=500&q=80',
+    americas: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&h=500&q=80',
+    asia: 'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1600&h=500&q=80',
+    europe: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1600&h=500&q=80',
+    'latin-america': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&h=500&q=80'
   };
   const minervaHeaderImage = Object.values(HEADER_IMAGES)[Math.floor(Math.random() * Object.values(HEADER_IMAGES).length)];
   let currentPrefs = null;
@@ -160,14 +158,6 @@
     const headingFont = fontStack(prefs.headingFont);
     const theme = themeFor(prefs.theme);
 
-    if (bodyFont) {
-      css += `  --sans-font-family: ${bodyFont} !important;\n`;
-    }
-
-    if (headingFont) {
-      css += `  --serif-font-family: ${headingFont} !important;\n`;
-    }
-
     Object.entries(typeScale).forEach(([key, value]) => {
       css += `  --${key}: calc(${value} * ${scale}) !important;\n`;
     });
@@ -183,53 +173,33 @@
       css += '  --border-radius: 12px !important;\n';
     }
 
-    if (theme) {
-      css += `  --black: ${theme.text} !important;\n`;
-      css += '  --white: #ffffff !important;\n';
-      css += `  --black-tint-10: ${theme.text} !important;\n`;
-      css += `  --black-tint-20: ${theme.text} !important;\n`;
-      css += `  --black-tint-40: ${theme.muted} !important;\n`;
-      css += `  --black-tint-70: ${theme.muted} !important;\n`;
-      css += `  --black-tint-90: ${theme.panelAlt} !important;\n`;
-      css += `  --black-tint-95: ${theme.panel} !important;\n`;
-      css += `  --black-tint-97: ${theme.bg} !important;\n`;
-      css += `  --blue: ${theme.accent} !important;\n`;
-      css += `  --blue-shade-20: ${theme.accent} !important;\n`;
-      css += `  --blue-tint-20: ${theme.accent} !important;\n`;
-      css += `  --blue-tint-90: ${theme.accentSoft} !important;\n`;
-    }
-
     css += '}\n\n';
 
     const appRootSelector = ':is(html#minerva-dashboard, body#minerva-dashboard)';
     const appSelector = ':is(html#minerva-dashboard body, body#minerva-dashboard)';
     const headerSelector = 'header#header, .subheader';
-    const scopedHeaderSelector = `${appSelector} header#header, ${appSelector} .subheader`;
     const imagerySelector = '.header-content .imagery, div.imagery';
     if (bodyFont) {
-      css += `${appSelector}, ${appSelector} .body, ${appSelector} .body-s, ${appSelector} button, ${appSelector} input, ${appSelector} select, ${appSelector} textarea, ${appSelector} table { font-family: ${bodyFont} !important; }\n`;
+      css += `${appSelector} .body:not(header#header *), ${appSelector} .body-s:not(header#header *), ${appSelector} button:not(header#header *), ${appSelector} input:not(header#header *), ${appSelector} select:not(header#header *), ${appSelector} textarea:not(header#header *), ${appSelector} table:not(header#header *), ${appSelector} .recently-graded-body, ${appSelector} .recently-graded-body *, ${appSelector} aside.sidebar, ${appSelector} article#main-semantic-content { font-family: ${bodyFont} !important; }\n`;
     }
     if (headingFont) {
-      css += `${appSelector} h1, ${appSelector} h2, ${appSelector} h3, ${appSelector} h4, ${appSelector} h5, ${appSelector} h6, ${appSelector} .h1, ${appSelector} .h2, ${appSelector} .h3, ${appSelector} .h4, ${appSelector} .h5, ${appSelector} .h6 { font-family: ${headingFont} !important; }\n`;
+      css += `${appSelector} h1:not(header#header *), ${appSelector} h2:not(header#header *), ${appSelector} h3:not(header#header *), ${appSelector} h4:not(header#header *), ${appSelector} h5:not(header#header *), ${appSelector} h6:not(header#header *), ${appSelector} .h1:not(header#header *), ${appSelector} .h2:not(header#header *), ${appSelector} .h3:not(header#header *), ${appSelector} .h4:not(header#header *), ${appSelector} .h5:not(header#header *), ${appSelector} .h6:not(header#header *) { font-family: ${headingFont} !important; }\n`;
     }
     if (prefs.headerPreset === 'custom' && headerImage) {
-      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.2)), url("${cssUrl(headerImage)}") !important; background-size: cover !important; background-position: center center !important; }\n`;
+      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.28), rgba(0,0,0,0.2)), url("${cssUrl(headerImage)}") !important; background-size: 100% auto !important; background-repeat: no-repeat !important; background-position: center bottom !important; }\n`;
     } else if (prefs.headerPreset === 'minerva') {
-      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.22)), url("${minervaHeaderImage}") !important; background-size: cover !important; background-position: center center !important; }\n`;
+      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.22)), url("${minervaHeaderImage}") !important; background-size: 100% auto !important; background-repeat: no-repeat !important; background-position: center bottom !important; }\n`;
     } else if (HEADER_IMAGES[prefs.headerPreset]) {
-      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.22)), url("${HEADER_IMAGES[prefs.headerPreset]}") !important; background-size: cover !important; background-position: center center !important; }\n`;
+      css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.22)), url("${HEADER_IMAGES[prefs.headerPreset]}") !important; background-size: 100% auto !important; background-repeat: no-repeat !important; background-position: center bottom !important; }\n`;
     }
 
-    if ((prefs.headerPreset && prefs.headerPreset !== 'default') || prefs.headerText) {
+    if (prefs.headerPreset && prefs.headerPreset !== 'default') {
       css += `${headerSelector} { position: relative !important; overflow: hidden !important; }\n`;
     }
-    css += `section.message-region { display: block !important; min-height: 0 !important; }\n`;
-    css += `.${BANNER_ID} { display: block !important; margin: 8px 24px 0 !important; padding: 10px 14px !important; border-radius: 12px !important; position: relative !important; z-index: 40 !important; font-size: 0.95rem !important; line-height: 1.35 !important; font-weight: 700 !important; color: #ffffff !important; background: rgba(0,0,0,0.46) !important; text-shadow: 0 1px 8px rgba(0,0,0,0.55) !important; backdrop-filter: blur(4px) !important; }\n`;
-    css += `.${BANNER_ID}.hidden { display: none !important; }\n`;
 
     if (prefs.roundedCards) {
       css += `${appRootSelector} { --border-radius: 16px !important; }\n`;
-      css += `${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .office-hours-region .card, ${appSelector} .announcement-region .card, ${appSelector} .home-view-right-column > div, ${appSelector} .student-assignments-list-view, ${appSelector} .assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .dashboard-module.js-rubric-key, ${appSelector} .root-d3-0-2-10, ${appSelector} .root-d14-0-2-63, ${appSelector} .root-d5-0-2-62, ${appSelector} .root-d38-0-2-108, ${appSelector} .root-d9-0-2-107, ${appSelector} .root-d39-0-2-110, ${appSelector} .root-d10-0-2-109, ${appSelector} .root-d41-0-2-113, ${appSelector} .h2.mb5, ${appSelector} aside.sidebar, ${appSelector} .dashboard-control-center-view, ${appSelector} .menu-view .menu-items, ${appSelector} .profile-photo-medium, ${appSelector} .circle-button--transparent { border-radius: 16px !important; overflow: hidden !important; }\n`;
+      css += `${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .office-hours-region .card, ${appSelector} .announcement-region .card, ${appSelector} .home-view-right-column > div, ${appSelector} .student-assignments-list-view, ${appSelector} .assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .dashboard-module.js-rubric-key, ${appSelector} .root-d3-0-2-10, ${appSelector} .root-d14-0-2-63, ${appSelector} .root-d5-0-2-62, ${appSelector} .root-d38-0-2-108, ${appSelector} .root-d9-0-2-107, ${appSelector} .root-d39-0-2-110, ${appSelector} .root-d10-0-2-109, ${appSelector} .root-d41-0-2-113, ${appSelector} .h2.mb5, ${appSelector} .dashboard-control-center-view, ${appSelector} .menu-view .menu-items, ${appSelector} .profile-photo-medium, ${appSelector} .circle-button--transparent { border-radius: 16px !important; overflow: hidden !important; }\n`;
       css += '.profile-photo-medium, .circle-button--transparent { border-radius: 999px !important; }\n';
     }
 
@@ -241,8 +211,8 @@
       css += `${appSelector} .text-black-tint-20, ${appSelector} .text-black-tint-40, ${appSelector} .body, ${appSelector} .body-s, ${appSelector} .body-xs, ${appSelector} article#main-semantic-content, ${appSelector} article#main-semantic-content p, ${appSelector} article#main-semantic-content span, ${appSelector} article#main-semantic-content div { color: ${theme.text} !important; }\n`;
       css += `${appSelector} .text-black-tint-70, ${appSelector} .text-black-tint-90, ${appSelector} footer, ${appSelector} footer * { color: ${theme.muted} !important; }\n`;
       css += `${appSelector} article#main-semantic-content a, ${appSelector} .navigation-link, ${appSelector} .link-text { color: ${theme.accent} !important; }\n`;
-      css += `${appSelector} button, ${appSelector} select, ${appSelector} input, ${appSelector} textarea, ${appSelector} [contenteditable="true"], ${appSelector} .react-select__control, ${appSelector} [class*="react-select__control"], ${appSelector} .react-select__menu, ${appSelector} [class*="-menu"], ${appSelector} .title-search { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
-      css += `${appSelector} .react-select__single-value, ${appSelector} .react-select__placeholder, ${appSelector} [class*="singleValue"], ${appSelector} [class*="placeholder"] { color: ${theme.text} !important; }\n`;
+      css += `${appSelector} button:not(header#header *), ${appSelector} select:not(header#header *), ${appSelector} input:not(header#header *), ${appSelector} textarea:not(header#header *), ${appSelector} [contenteditable="true"]:not(header#header *), ${appSelector} .react-select__control:not(header#header *), ${appSelector} [class*="react-select__control"]:not(header#header *), ${appSelector} .react-select__menu:not(header#header *), ${appSelector} [class*="-menu"]:not(header#header *), ${appSelector} .title-search:not(header#header *) { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
+      css += `${appSelector} .react-select__single-value:not(header#header *), ${appSelector} .react-select__placeholder:not(header#header *), ${appSelector} [class*="singleValue"]:not(header#header *), ${appSelector} [class*="placeholder"]:not(header#header *) { color: ${theme.text} !important; }\n`;
       css += `${appSelector} tr.assignment-item-view:hover, ${appSelector} tr.recently-graded-item-view:hover, ${appSelector} li.sidebar-item-view.active a.navigation-link, ${appSelector} .navigation-link:hover { background-color: ${theme.hover} !important; }\n`;
       css += `${appSelector} .status-wrapper.status-red { background-color: #f8d7da !important; color: #8a1f2d !important; border-color: #d88b96 !important; }\n`;
     }
@@ -267,48 +237,10 @@
     }
   }
 
-  function ensureBanner(prefs) {
-    const container = document.querySelector('section.message-region') || document.querySelector('.header-content .main-region') || document.querySelector('.subheader') || document.querySelector('header#header');
-    if (!container) return;
-
-    let banner = document.getElementById(BANNER_ID);
-    if (!banner) {
-      banner = document.createElement('div');
-      banner.id = BANNER_ID;
-      banner.className = BANNER_ID;
-    }
-
-    if (banner.parentElement !== container) {
-      container.appendChild(banner);
-    }
-
-    banner.textContent = prefs.headerText || '';
-    banner.classList.toggle('hidden', !prefs.headerText);
-  }
-
   async function refresh(prefs) {
     const headerImage = prefs.headerPreset === 'custom' ? await window.MinervaStorage.loadHeaderImage() : null;
     applyStyle(prefs, headerImage);
-    ensureBanner(prefs);
     keepStyleLast();
-  }
-
-  function findCalendarFeedLink() {
-    const exactInput = document.querySelector(CALENDAR_FEED_SELECTOR);
-    const candidates = [
-      exactInput,
-      ...document.querySelectorAll('input[readonly], input[type="text"], input.body-s, textarea, code')
-    ].filter(Boolean);
-
-    for (const node of candidates) {
-      const value = node.value || node.getAttribute('value') || node.textContent || node.innerHTML || '';
-      const trimmed = value.trim();
-      if (/^https?:\/\//i.test(trimmed) || /^webcal:\/\//i.test(trimmed)) {
-        return trimmed;
-      }
-    }
-
-    return null;
   }
 
   function watchNavigation() {
@@ -351,9 +283,6 @@
           sendResponse({ ok: true });
         });
         return true;
-      } else if (message && message.type === 'GET_CALENDAR_LINK') {
-        const link = findCalendarFeedLink();
-        sendResponse(link ? { ok: true, link } : { ok: false, error: 'Calendar feed link not found on this page.' });
       }
       return false;
     });

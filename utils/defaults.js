@@ -4,9 +4,7 @@ window.MINERVA_DEFAULT_PREFS = {
   theme: 'default',
   fontFamily: 'default',
   headingFont: 'default',
-  fontSize: 1.0,
   accentColor: null,
   headerPreset: 'default',
-  headerText: '',
   roundedCards: false
 };
