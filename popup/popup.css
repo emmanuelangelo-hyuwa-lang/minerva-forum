@@ -124,19 +124,6 @@ button:hover {
   font-size: 0.8rem;
   line-height: 1.4;
 }
-.support-button {
-  display: block;
-  margin-top: 16px;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #ef4444, #f97316);
-  color: #ffffff;
-  text-align: center;
-  text-decoration: none;
-  font-size: 0.92rem;
-  font-weight: 800;
-  box-shadow: 0 14px 26px rgba(244, 114, 54, 0.24);
-}
 .bug-button {
   display: block;
   margin-top: 12px;
@@ -152,7 +139,4 @@ button:hover {
 }
 .bug-button:hover {
   background: linear-gradient(135deg, #1d4ed8, #2563eb);
-}
-.support-button:hover {
-  background: linear-gradient(135deg, #dc2626, #ea580c);
 }

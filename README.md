@@ -46,7 +46,6 @@ It is built using Manifest V3 and plain HTML, CSS, and JavaScript. The extension
 - **Rounded UI**: Applies softer border radius styling to cards and panels.
 - **Reset**: Restores defaults and clears the uploaded header image.
 - **Report a bug**: Opens a mail message to `kunate0@gmail.com`.
-- **Buy me a coffee**: Opens the support link.
 
 ## File overview
 
@@ -98,7 +97,6 @@ The content script is injected into all matching `forum.minerva.edu` pages at `d
 
 - `storage`: store preferences and uploaded header images.
 - `activeTab`: send updates to the active tab.
-- `clipboardWrite`: included in the manifest but not currently used by the UI.
 - Host permission: `*://forum.minerva.edu/*`.
 
 ## Known limitations
