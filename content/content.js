@@ -35,83 +35,96 @@
     'Roboto Slab': 'palatino',
     'Times New Roman': 'garamond'
   };
+  // Each theme maps onto Forum's own design tokens (--white, --black-tint-*, --blue*),
+  // so every surface the app draws with those tokens picks up the palette, including
+  // components this extension has never seen. Forum layers them as:
+  //   page (--black-tint-95) < cards (--white) with zebra rows (--black-tint-97),
+  //   dividers (--black-tint-90), text ramp (--black-tint-70 → --black),
+  //   and a dark sidebar painted with --black-tint-20 / -10 / --black.
   const THEMES = {
     charcoal: {
-      bg: '#eef3f8',
-      panel: '#f8fafc',
-      panelAlt: '#dbe7f3',
-      text: '#1b2633',
-      muted: '#53677c',
-      line: '#9db2c8',
-      accent: '#245f8f',
-      accentSoft: '#d6e7f5',
-      hover: '#c9dcec'
+      page: '#e1e8f0',
+      surface: '#fbfcfe',
+      surfaceAlt: '#f1f5f9',
+      line: '#d0dbe7',
+      subtle: '#9fb1c4',
+      muted: '#56687c',
+      text: '#243244',
+      strong: '#1a2634',
+      ink: '#0f1823',
+      accent: '#2d6da3'
     },
     highContrast: {
-      bg: '#f4f4f0',
-      panel: '#ffffff',
-      panelAlt: '#e4e1d6',
-      text: '#111111',
+      page: '#e8e5db',
+      surface: '#ffffff',
+      surfaceAlt: '#f6f4ed',
+      line: '#d3cdbb',
+      subtle: '#b3ac94',
       muted: '#4b4b43',
-      line: '#88816c',
-      accent: '#846400',
-      accentSoft: '#fff1ad',
-      hover: '#ece4bf'
+      text: '#171717',
+      strong: '#0d0d0d',
+      ink: '#000000',
+      accent: '#8a6500'
     },
     forest: {
-      bg: '#edf6ef',
-      panel: '#f8fcf8',
-      panelAlt: '#d5ead9',
-      text: '#183522',
-      muted: '#4f705b',
-      line: '#91b69b',
-      accent: '#2c7040',
-      accentSoft: '#d8eddd',
-      hover: '#c9e2d0'
+      page: '#dfece3',
+      surface: '#fbfdfb',
+      surfaceAlt: '#eff6f1',
+      line: '#c6dbcc',
+      subtle: '#93b39c',
+      muted: '#4c6d58',
+      text: '#1d3a27',
+      strong: '#152f1e',
+      ink: '#0c2014',
+      accent: '#2b7743'
     },
     burgundy: {
-      bg: '#f8eef2',
-      panel: '#fff9fb',
-      panelAlt: '#efd2dc',
-      text: '#3c1724',
-      muted: '#7c5160',
-      line: '#c295a5',
-      accent: '#9a2f55',
-      accentSoft: '#f2dce5',
-      hover: '#e8c9d5'
+      page: '#f0e0e6',
+      surface: '#fffbfc',
+      surfaceAlt: '#faeff3',
+      line: '#e5c9d3',
+      subtle: '#c095a5',
+      muted: '#7a4f5f',
+      text: '#3d1726',
+      strong: '#2f101c',
+      ink: '#1f0911',
+      accent: '#a1325a'
     },
     ultraviolet: {
-      bg: '#f3effa',
-      panel: '#fbf9ff',
-      panelAlt: '#ded2f2',
-      text: '#2a1d40',
-      muted: '#66537e',
-      line: '#a996ca',
-      accent: '#684aa0',
-      accentSoft: '#e7dcf8',
-      hover: '#d9ccee'
+      page: '#e7e0f2',
+      surface: '#fcfbff',
+      surfaceAlt: '#f4f0fb',
+      line: '#d8cdeb',
+      subtle: '#a998c9',
+      muted: '#64517d',
+      text: '#2b1e44',
+      strong: '#211636',
+      ink: '#150d25',
+      accent: '#6a49ae'
     },
     ocean: {
-      bg: '#edf7f8',
-      panel: '#f7fcfd',
-      panelAlt: '#cee8ec',
-      text: '#12343b',
-      muted: '#4d7078',
-      line: '#8bb7bf',
-      accent: '#1c7585',
-      accentSoft: '#d5eef2',
-      hover: '#c4e1e7'
+      page: '#daecef',
+      surface: '#fbfefe',
+      surfaceAlt: '#edf6f7',
+      line: '#c1dde2',
+      subtle: '#88b4bc',
+      muted: '#4a6e76',
+      text: '#133a42',
+      strong: '#0d2d34',
+      ink: '#071f24',
+      accent: '#14798b'
     },
     ember: {
-      bg: '#fbf0e8',
-      panel: '#fffaf6',
-      panelAlt: '#f1d8c8',
-      text: '#3b2014',
-      muted: '#7c5a49',
-      line: '#c9a08a',
-      accent: '#9b4f22',
-      accentSoft: '#f5dfd0',
-      hover: '#eccfbd'
+      page: '#f2e3d6',
+      surface: '#fffbf7',
+      surfaceAlt: '#fbf1e9',
+      line: '#e8d0be',
+      subtle: '#c99f86',
+      muted: '#7a5846',
+      text: '#3b2116',
+      strong: '#2d180f',
+      ink: '#1f0f08',
+      accent: '#a5521f'
     }
   };
   const HEADER_IMAGES = {
@@ -122,6 +135,36 @@
     'latin-america': 'https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=1600&h=500&q=80'
   };
   const minervaHeaderImage = Object.values(HEADER_IMAGES)[Math.floor(Math.random() * Object.values(HEADER_IMAGES).length)];
+  const DEFAULT_ACCENT = '#0a78bf';
+  const CARD_ATTR = 'data-mfc-card';
+  // Forum's React components are generic <Box> elements with generated JSS class names
+  // (e.g. root-d7-0-2-20) that change between builds and pages, so cards are found by
+  // their stable data-testid plus whether they actually paint a surface.
+  const BOX_SELECTOR = '[data-testid="Box"]';
+  const CARD_SELECTORS = [
+    `[${CARD_ATTR}="1"]`,
+    '.dashboard-module',
+    '.breadcrumbs',
+    '.outcome-index-view .all-outcomes-view',
+    '.fds-card',
+    '.office-hours-region .card',
+    '.announcement-region .card',
+    '.menu-view .menu-items',
+    '[class*="shadow-level-"]'
+  ];
+  // Older (non-React) Forum views hardcode #fff instead of using --white.
+  const LEGACY_WHITE_SURFACES = [
+    '.bg-white',
+    '.text-input',
+    '.textarea',
+    '.one-line-input-view',
+    '.RichEditor-root',
+    '.menu-view .menu-items',
+    '.menu-view .menu-items li.menu-item-view .row',
+    '.outcome-assessment-editor-view',
+    '.outcome-index-view .all-outcomes-view',
+    '.bug-report-form-v2'
+  ];
   let currentPrefs = null;
 
   function cssUrl(value) {
@@ -141,6 +184,51 @@
     return THEMES[value] || null;
   }
 
+  function parseHex(hex) {
+    const match = /^#?([0-9a-f]{6})$/i.exec(String(hex || '').trim());
+    if (!match) return null;
+    const n = parseInt(match[1], 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+
+  // Blend `hex` toward `target` by `amount` (0 = hex, 1 = target).
+  function mix(hex, target, amount) {
+    const a = parseHex(hex);
+    const b = parseHex(target);
+    if (!a || !b) return hex;
+    return '#' + a.map((c, i) => Math.round(c + (b[i] - c) * amount).toString(16).padStart(2, '0')).join('');
+  }
+
+  function rgba(hex, alpha) {
+    const c = parseHex(hex);
+    return c ? `rgba(${c[0]}, ${c[1]}, ${c[2]}, ${alpha})` : hex;
+  }
+
+  // Forum's accent ramp: base, two darker shades, a lighter tint, and a pale wash.
+  function accentTokens(accent, paper, ink) {
+    return {
+      '--blue': accent,
+      '--blue-shade-20': mix(accent, ink, 0.2),
+      '--blue-shade-40': mix(accent, ink, 0.4),
+      '--blue-tint-20': mix(accent, paper, 0.2),
+      '--blue-tint-90': mix(accent, paper, 0.88)
+    };
+  }
+
+  function themeTokens(theme) {
+    return Object.assign({
+      '--white': theme.surface,
+      '--black-tint-97': theme.surfaceAlt,
+      '--black-tint-95': theme.page,
+      '--black-tint-90': theme.line,
+      '--black-tint-70': theme.subtle,
+      '--black-tint-40': theme.muted,
+      '--black-tint-20': theme.text,
+      '--black-tint-10': theme.strong,
+      '--black': theme.ink
+    }, accentTokens(theme.accent, theme.surface, theme.ink));
+  }
+
   function buildCSS(prefs, headerImage) {
     const scale = Number(prefs.fontSize) || 1.0;
     const typeScale = {
@@ -152,31 +240,33 @@
       h6: '.75rem'
     };
 
-    let css = ':root, html#minerva-dashboard, body#minerva-dashboard {\n';
-
     const bodyFont = fontStack(prefs.fontFamily);
     const headingFont = fontStack(prefs.headingFont);
     const theme = themeFor(prefs.theme);
+    const tokens = {};
 
     Object.entries(typeScale).forEach(([key, value]) => {
-      css += `  --${key}: calc(${value} * ${scale}) !important;\n`;
+      tokens[`--${key}`] = `calc(${value} * ${scale})`;
     });
 
-    if (prefs.accentColor) {
-      css += `  --blue: ${prefs.accentColor} !important;\n`;
-      css += `  --blue-shade-20: ${prefs.accentColor} !important;\n`;
-      css += `  --blue-tint-20: ${prefs.accentColor} !important;\n`;
-      css += `  --blue-tint-90: ${prefs.accentColor}20 !important;\n`;
+    if (theme) {
+      Object.assign(tokens, themeTokens(theme));
+    } else if (parseHex(prefs.accentColor) && prefs.accentColor.toLowerCase() !== DEFAULT_ACCENT) {
+      Object.assign(tokens, accentTokens(prefs.accentColor, '#ffffff', '#010101'));
     }
 
     if (prefs.roundedCards) {
-      css += '  --border-radius: 12px !important;\n';
+      tokens['--border-radius'] = '8px';
     }
 
+    let css = ':root, html#minerva-dashboard, body#minerva-dashboard {\n';
+    Object.entries(tokens).forEach(([key, value]) => {
+      css += `  ${key}: ${value} !important;\n`;
+    });
     css += '}\n\n';
 
-    const appRootSelector = ':is(html#minerva-dashboard, body#minerva-dashboard)';
     const appSelector = ':is(html#minerva-dashboard body, body#minerva-dashboard)';
+    const cardSelector = CARD_SELECTORS.map((selector) => `${appSelector} ${selector}`).join(', ');
     const headerSelector = 'header#header, .subheader';
     const imagerySelector = '.header-content .imagery, div.imagery';
     if (bodyFont) {
@@ -191,43 +281,55 @@
       css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.22)), url("${minervaHeaderImage}") !important; background-size: 100% auto !important; background-repeat: no-repeat !important; background-position: center bottom !important; }\n`;
     } else if (HEADER_IMAGES[prefs.headerPreset]) {
       css += `${imagerySelector} { display: block !important; background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.22)), url("${HEADER_IMAGES[prefs.headerPreset]}") !important; background-size: 100% auto !important; background-repeat: no-repeat !important; background-position: center bottom !important; }\n`;
+    } else if (theme) {
+      // Without a backdrop image Forum shows a flat grey band; tint it to match the theme.
+      css += `${imagerySelector} { background-color: ${theme.strong} !important; background-image: linear-gradient(115deg, ${theme.ink} 0%, ${theme.strong} 35%, ${mix(theme.accent, theme.ink, 0.25)} 100%) !important; }\n`;
     }
 
     if (prefs.headerPreset && prefs.headerPreset !== 'default') {
       css += `${headerSelector} { position: relative !important; overflow: hidden !important; }\n`;
     }
 
-    if (prefs.roundedCards) {
-      css += `${appRootSelector} { --border-radius: 16px !important; }\n`;
-      css += `${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .office-hours-region .card, ${appSelector} .announcement-region .card, ${appSelector} .home-view-right-column > div, ${appSelector} .student-assignments-list-view, ${appSelector} .assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .dashboard-module.js-rubric-key, ${appSelector} .root-d3-0-2-10, ${appSelector} .root-d14-0-2-63, ${appSelector} .root-d5-0-2-62, ${appSelector} .root-d38-0-2-108, ${appSelector} .root-d9-0-2-107, ${appSelector} .root-d39-0-2-110, ${appSelector} .root-d10-0-2-109, ${appSelector} .root-d41-0-2-113, ${appSelector} .h2.mb5, ${appSelector} .dashboard-control-center-view, ${appSelector} .menu-view .menu-items, ${appSelector} .profile-photo-medium, ${appSelector} .circle-button--transparent { border-radius: 16px !important; overflow: hidden !important; }\n`;
-      css += '.profile-photo-medium, .circle-button--transparent { border-radius: 999px !important; }\n';
+    if (theme) {
+      css += `${LEGACY_WHITE_SURFACES.map((selector) => `${appSelector} ${selector}`).join(', ')} { background-color: var(--white) !important; }\n`;
+      // Cards get a hairline in the theme's line colour plus a tinted shadow, so they read
+      // as distinct layers on the tinted page instead of blending into it.
+      css += `${cardSelector} { box-shadow: 0 0 0 1px ${theme.line}, 0 1px 3px ${rgba(theme.ink, 0.08)}, 0 4px 14px ${rgba(theme.ink, 0.05)} !important; }\n`;
+      css += `${appSelector} table.fds-table thead th, ${appSelector} table.fds-table thead .th { background-color: ${theme.surfaceAlt} !important; }\n`;
+      css += `${appSelector} .sidebar-list-view { box-shadow: inset -1px 0 0 ${rgba(theme.ink, 0.35)} !important; }\n`;
+      css += `${appSelector} ::selection { background-color: ${mix(theme.accent, theme.surface, 0.7)} !important; }\n`;
     }
 
-    if (theme) {
-      css += `${appSelector}, ${appSelector} > .main-region, ${appSelector} .dashboard-layout, ${appSelector} .main-wrapper, ${appSelector} .content-wrapper, ${appSelector} .stage-wrapper, ${appSelector} article#main-semantic-content, ${appSelector} article#main-semantic-content .content, ${appSelector} .react-router-content { background-color: ${theme.bg} !important; color: ${theme.text} !important; }\n`;
-      css += `${appSelector} aside.sidebar, ${appSelector} .announcement-region, ${appSelector} .announcements-region, ${appSelector} .office-hours-region, ${appSelector} table.fds-table, ${appSelector} .fds-card, ${appSelector} .home-view-right-column > div, ${appSelector} .assignments-list-view, ${appSelector} .student-assignments-list-view, ${appSelector} .all-outcomes-view, ${appSelector} .past-sections-view, ${appSelector} .visiting-sections-view, ${appSelector} .all-events-view, ${appSelector} .dashboard-module.js-rubric-key { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
-      css += `${appSelector} table.fds-table th { background-color: ${theme.accentSoft} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
-      css += `${appSelector} table.fds-table td { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
-      css += `${appSelector} .text-black-tint-20, ${appSelector} .text-black-tint-40, ${appSelector} .body, ${appSelector} .body-s, ${appSelector} .body-xs, ${appSelector} article#main-semantic-content, ${appSelector} article#main-semantic-content p, ${appSelector} article#main-semantic-content span, ${appSelector} article#main-semantic-content div { color: ${theme.text} !important; }\n`;
-      css += `${appSelector} .text-black-tint-70, ${appSelector} .text-black-tint-90, ${appSelector} footer, ${appSelector} footer * { color: ${theme.muted} !important; }\n`;
-      css += `${appSelector} article#main-semantic-content a, ${appSelector} .navigation-link, ${appSelector} .link-text { color: ${theme.accent} !important; }\n`;
-      css += `${appSelector} button:not(header#header *), ${appSelector} select:not(header#header *), ${appSelector} input:not(header#header *), ${appSelector} textarea:not(header#header *), ${appSelector} [contenteditable="true"]:not(header#header *), ${appSelector} .react-select__control:not(header#header *), ${appSelector} [class*="react-select__control"]:not(header#header *), ${appSelector} .react-select__menu:not(header#header *), ${appSelector} [class*="-menu"]:not(header#header *), ${appSelector} .title-search:not(header#header *) { background-color: ${theme.panel} !important; color: ${theme.text} !important; border-color: ${theme.line} !important; }\n`;
-      css += `${appSelector} .react-select__single-value:not(header#header *), ${appSelector} .react-select__placeholder:not(header#header *), ${appSelector} [class*="singleValue"]:not(header#header *), ${appSelector} [class*="placeholder"]:not(header#header *) { color: ${theme.text} !important; }\n`;
-      css += `${appSelector} tr.assignment-item-view:hover, ${appSelector} tr.recently-graded-item-view:hover, ${appSelector} li.sidebar-item-view.active a.navigation-link, ${appSelector} .navigation-link:hover { background-color: ${theme.hover} !important; }\n`;
-      css += `${appSelector} .status-wrapper.status-red { background-color: #f8d7da !important; color: #8a1f2d !important; border-color: #d88b96 !important; }\n`;
+    if (prefs.roundedCards) {
+      css += `${cardSelector} { border-radius: 14px !important; }\n`;
+      css += `${appSelector} table.fds-table thead tr > :first-child { border-top-left-radius: 8px !important; border-bottom-left-radius: 8px !important; }\n`;
+      css += `${appSelector} table.fds-table thead tr > :last-child { border-top-right-radius: 8px !important; border-bottom-right-radius: 8px !important; }\n`;
+      css += `${appSelector} .outcome:first-child { border-top-left-radius: 8px !important; border-top-right-radius: 8px !important; }\n`;
+      css += `${appSelector} .outcome:last-child { border-bottom-left-radius: 8px !important; border-bottom-right-radius: 8px !important; }\n`;
+      // Sidebar: inset pill-shaped links. Highlight moves from the full-width <li> to the link.
+      css += `${appSelector} .sidebar-list-view .sidebar-items-list { padding-top: 6px !important; }\n`;
+      css += `${appSelector} .sidebar-list-view .sidebar-items-list .sidebar-item-view.active { background-color: transparent !important; }\n`;
+      css += `${appSelector} .sidebar-list-view .sidebar-items-list .sidebar-item-view > a { margin: 2px 8px !important; padding-left: 12px !important; padding-right: 12px !important; border-radius: 10px !important; }\n`;
+      css += `${appSelector} .sidebar-list-view .sidebar-items-list .sidebar-item-view.active > a { background-color: var(--black) !important; }\n`;
+      css += `${appSelector} .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view.active { background-color: transparent !important; }\n`;
+      css += `${appSelector} .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view > a { margin: 1px 8px !important; padding-left: 47px !important; border-radius: 8px !important; }\n`;
+      css += `${appSelector} .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view.active > a { background-color: var(--black) !important; }\n`;
+      css += `${appSelector} [data-testid="Button"] { border-radius: var(--border-radius) !important; }\n`;
+      css += `${appSelector} .profile-photo-medium, ${appSelector} .circle-button--transparent { border-radius: 999px !important; }\n`;
     }
 
     return css;
   }
 
   function applyStyle(prefs, headerImage) {
-    const existing = document.getElementById(STYLE_ID);
-    if (existing) existing.remove();
-    const style = document.createElement('style');
-    style.id = STYLE_ID;
-    style.dataset.source = STYLE_SOURCE;
+    let style = document.getElementById(STYLE_ID);
+    if (!style) {
+      style = document.createElement('style');
+      style.id = STYLE_ID;
+      style.dataset.source = STYLE_SOURCE;
+      document.head.appendChild(style);
+    }
     style.textContent = buildCSS(prefs, headerImage);
-    document.head.appendChild(style);
   }
 
   function keepStyleLast() {
@@ -237,26 +339,29 @@
     }
   }
 
+  // Mark top-level Boxes that paint a surface (background or shadow) as cards. Uses an
+  // attribute rather than a class because React rewrites className on re-render.
+  function tagCards() {
+    document.querySelectorAll(`${BOX_SELECTOR}:not([${CARD_ATTR}])`).forEach((el) => {
+      const rect = el.getBoundingClientRect();
+      if (!rect.width || !rect.height) return; // not laid out yet; check again later
+      const cs = getComputedStyle(el);
+      const paints = cs.backgroundColor !== 'rgba(0, 0, 0, 0)' || cs.boxShadow !== 'none';
+      const isCard = paints &&
+        rect.width >= 160 && rect.height >= 40 &&
+        !el.parentElement.closest(`[${CARD_ATTR}="1"]`);
+      el.setAttribute(CARD_ATTR, isCard ? '1' : '0');
+    });
+  }
+
   async function refresh(prefs) {
     const headerImage = prefs.headerPreset === 'custom' ? await window.MinervaStorage.loadHeaderImage() : null;
     applyStyle(prefs, headerImage);
     keepStyleLast();
+    tagCards();
   }
 
-  function watchNavigation() {
-    const target = document.querySelector('.react-router-content') || document.querySelector('.content') || document.body;
-    if (!target) return;
-
-    const observer = new MutationObserver(() => {
-      if (currentPrefs) refresh(currentPrefs);
-    });
-
-    observer.observe(target, { childList: true, subtree: true });
-  }
-
-  function watchHeadStyles() {
-    if (!document.head) return;
-
+  function watchDom() {
     let pending = false;
     const observer = new MutationObserver(() => {
       if (pending) return;
@@ -264,17 +369,17 @@
       requestAnimationFrame(() => {
         pending = false;
         keepStyleLast();
+        tagCards();
       });
     });
 
-    observer.observe(document.head, { childList: true });
+    observer.observe(document.documentElement, { childList: true, subtree: true });
   }
 
   async function init() {
     currentPrefs = await window.MinervaStorage.loadPrefs();
     await refresh(currentPrefs);
-    watchNavigation();
-    watchHeadStyles();
+    watchDom();
 
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message && message.type === 'UPDATE_PREFS' && message.prefs) {
