@@ -7,95 +7,60 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    <div class="container">
-      <div class="panel">
-        <div class="header-row">
-          <div>
-            <h2>Forum Customizer</h2>
-            <p class="subtitle">Why start 3 hours of class with boring looks designed for :). I didn't say it... Customize your forum!</p>
+    <header class="top">
+      <h1>Forum Customizer</h1>
+      <button id="reset" class="text-button" type="button">Reset</button>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button role="tab" type="button" data-tab="theme" aria-selected="true">Theme</button>
+      <button role="tab" type="button" data-tab="header" aria-selected="false">Header</button>
+      <button role="tab" type="button" data-tab="text" aria-selected="false">Text</button>
+    </nav>
+
+    <main>
+      <section class="panel" data-panel="theme" role="tabpanel">
+        <h2 class="label">Light</h2>
+        <div class="swatches" id="themes-light"></div>
+        <h2 class="label">Dark</h2>
+        <div class="swatches" id="themes-dark"></div>
+
+        <div class="row">
+          <span class="row-label">Accent</span>
+          <div class="row-control">
+            <button id="accent-reset" class="text-button" type="button">Use theme's</button>
+            <input id="accent" type="color" aria-label="Accent color" />
           </div>
         </div>
-
-        <label>Theme
-          <select id="theme-select">
-            <option value="default">Default Minerva Timeline</option>
-            <option value="charcoal">San Cisco Fog</option>
-            <option value="high-contrast">Berlin All-Nighter</option>
-            <option value="forest">M29 but cooler</option>
-            <option value="burgundy">Buenos Tango</option>
-            <option value="ultraviolet">Tokyo Mystery</option>
-            <option value="ocean">What even is this theme?</option>
-            <option value="ember">San Francisco Espresso</option>
-          </select>
-        </label>
-
-        <label>Body Font
-          <select id="font-select">
-            <option value="default">Default</option>
-            <option value="verdana">Verdana</option>
-            <option value="georgia">Georgia</option>
-            <option value="mono">Courier Mono</option>
-            <option value="trebuchet">Trebuchet</option>
-            <option value="palatino">Palatino</option>
-            <option value="impact">Impact</option>
-            <option value="comic">Comic</option>
-            <option value="optima">Optima</option>
-            <option value="lucida">Lucida Console</option>
-            <option value="copperplate">Copperplate</option>
-            <option value="garamond">Garamond</option>
-            <option value="futura">Futura</option>
-          </select>
-        </label>
-
-        <label>Heading Font
-          <select id="heading-font-select">
-            <option value="default">Default</option>
-            <option value="impact">Impact</option>
-            <option value="baskerville">Baskerville</option>
-            <option value="didot">Didot</option>
-            <option value="copperplate">Copperplate</option>
-            <option value="georgia">Georgia</option>
-            <option value="palatino">Palatino</option>
-            <option value="marker">Marker Felt</option>
-            <option value="papyrus">Papyrus</option>
-            <option value="futura">Futura</option>
-            <option value="chalkboard">Chalkboard</option>
-            <option value="menlo">Menlo</option>
-            <option value="garamond">Garamond</option>
-          </select>
-        </label>
-
-        <label>Accent color (only works on default theme)
-          <input id="accent-color" type="color" value="#0A78BF" />
-        </label>
-
-        <label>Header backdrop
-          <select id="header-preset">
-            <option value="default">Default</option>
-            <option value="minerva">Minerva Mode</option>
-            <option value="africa">Africa</option>
-            <option value="americas">Americas</option>
-            <option value="asia">Asia</option>
-            <option value="europe">Europe</option>
-            <option value="latin-america">Latin America</option>
-            <option value="custom">Custom upload</option>
-          </select>
-        </label>
-
-        <label>Upload header image
-          <input id="header-upload" type="file" accept="image/*" />
-        </label>
-
-        <label class="checkbox-label"><input id="rounded-cards" type="checkbox" /> Rounded UI (sidebar + cards/panels)</label>
-
-        <div class="actions">
-          <button id="reset-btn">Reset</button>
+        <div class="row">
+          <span class="row-label">Corners</span>
+          <div class="segmented" id="corners"></div>
         </div>
-        <p class="small-note">Use a 16:5 image ratio for best header fit. Header uploads are scaled to fit.</p>
-        <a class="bug-button" href="mailto:kunate0@gmail.com?subject=Bug%20Report" target="_blank" rel="noopener noreferrer">Report a bug</a>
-      </div>
-    </div>
+      </section>
 
+      <section class="panel" data-panel="header" role="tabpanel" hidden>
+        <div class="strips" id="headers"></div>
+        <button id="upload" class="button" type="button">Upload and crop your own</button>
+      </section>
+
+      <section class="panel" data-panel="text" role="tabpanel" hidden>
+        <div class="row">
+          <span class="row-label">Size</span>
+          <div class="row-control">
+            <input id="text-size" type="range" aria-label="Text size" />
+            <output id="text-size-value" for="text-size"></output>
+          </div>
+        </div>
+        <h2 class="label">Fonts</h2>
+        <div class="fonts" id="fonts"></div>
+      </section>
+    </main>
+
+    <footer class="bottom">
+      <a href="mailto:kunate0@gmail.com?subject=Bug%20Report" target="_blank" rel="noopener noreferrer">Report a bug</a>
+    </footer>
+
+    <script src="../utils/catalog.js"></script>
     <script src="../utils/defaults.js"></script>
     <script src="../utils/storage.js"></script>
     <script src="popup.js"></script>

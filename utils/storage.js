@@ -1,38 +1,25 @@
-// Storage helpers using chrome.storage.sync and local storage for image uploads.
+// Storage helpers: preferences in chrome.storage.sync, the (large) custom header image in local storage.
+// Requires utils/catalog.js and utils/defaults.js.
 window.MinervaStorage = {
   async loadPrefs() {
-    return new Promise((resolve) => {
-      chrome.storage.sync.get(['minervaPrefs'], (data) => {
-        resolve(Object.assign({}, window.MINERVA_DEFAULT_PREFS, data.minervaPrefs || {}));
-      });
-    });
+    const data = await chrome.storage.sync.get(['minervaPrefs']);
+    return window.MinervaPrefs.normalizePrefs(data.minervaPrefs);
   },
 
   async savePrefs(prefs) {
-    return new Promise((resolve) => {
-      chrome.storage.sync.set({ minervaPrefs: prefs }, () => {
-        resolve();
-      });
-    });
+    await chrome.storage.sync.set({ minervaPrefs: prefs });
   },
 
   async loadHeaderImage() {
-    return new Promise((resolve) => {
-      chrome.storage.local.get(['minervaHeaderImage'], (data) => {
-        resolve(data.minervaHeaderImage || null);
-      });
-    });
+    const data = await chrome.storage.local.get(['minervaHeaderImage']);
+    return data.minervaHeaderImage || null;
   },
 
   async saveHeaderImage(dataUrl) {
-    return new Promise((resolve) => {
-      if (!dataUrl) {
-        chrome.storage.local.remove(['minervaHeaderImage'], resolve);
-        return;
-      }
-      chrome.storage.local.set({ minervaHeaderImage: dataUrl }, () => {
-        resolve();
-      });
-    });
+    if (!dataUrl) {
+      await chrome.storage.local.remove(['minervaHeaderImage']);
+      return;
+    }
+    await chrome.storage.local.set({ minervaHeaderImage: dataUrl });
   }
 };
