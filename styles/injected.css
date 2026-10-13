@@ -1,4 +1,213 @@
-/* Base injected CSS — minimal baseline. */
-:root {
-  /* Runtime overrides are injected by content.js */
+/*
+ * Minerva Forum Customizer — all page styling lives in this file.
+ *
+ * content.js never writes CSS rules. It only:
+ *   - sets data-mfc-* attributes on <html> to switch the sections below on, and
+ *   - writes the chosen values as --mfc-* variables in <style id="mfc-vars">.
+ *
+ * Forum draws almost everything with a small set of design tokens (--white, --black-tint-*,
+ * --blue*), so theming is mostly re-pointing those tokens at the theme's colours.
+ */
+
+/* ---------------------------------------------------------------- Theme */
+
+html[data-mfc-theme],
+html[data-mfc-theme] body {
+  --white: var(--mfc-surface) !important;          /* cards, inputs */
+  --black-tint-97: var(--mfc-surface-alt) !important; /* zebra rows */
+  --black-tint-95: var(--mfc-page) !important;     /* page background */
+  --black-tint-90: var(--mfc-line) !important;     /* dividers, borders */
+  --black-tint-70: var(--mfc-subtle) !important;   /* faint text */
+  --black-tint-40: var(--mfc-muted) !important;    /* secondary text */
+  --black-tint-20: var(--mfc-text) !important;     /* body text */
+  --black-tint-10: var(--mfc-strong) !important;
+  --black: var(--mfc-ink) !important;
+}
+
+html[data-mfc-mode="dark"] {
+  color-scheme: dark;
+}
+
+/* Status colours (red/green/orange chips) use pale tints made for white pages; deepen them in dark mode. */
+html[data-mfc-mode="dark"],
+html[data-mfc-mode="dark"] body {
+  --red-tint-90: color-mix(in srgb, var(--red) 22%, var(--mfc-surface)) !important;
+  --red-violet-tint-90: color-mix(in srgb, var(--red-violet) 22%, var(--mfc-surface)) !important;
+  --orange-tint-90: color-mix(in srgb, var(--orange) 22%, var(--mfc-surface)) !important;
+  --yellow-tint-90: color-mix(in srgb, var(--yellow) 22%, var(--mfc-surface)) !important;
+  --yellow-green-tint-90: color-mix(in srgb, var(--yellow-green) 22%, var(--mfc-surface)) !important;
+  --green-tint-90: color-mix(in srgb, var(--green) 22%, var(--mfc-surface)) !important;
+  --blue-green-tint-90: color-mix(in srgb, var(--blue-green) 22%, var(--mfc-surface)) !important;
+  --blue-violet-tint-90: color-mix(in srgb, var(--blue-violet) 22%, var(--mfc-surface)) !important;
+  --violet-tint-90: color-mix(in srgb, var(--violet) 22%, var(--mfc-surface)) !important;
+  /* Outcome score chips */
+  --score-0: #a3a3a3 !important;
+  --score-4: #4ea3e0 !important;
+  --score-5: #a18be0 !important;
+  --score-light-0: color-mix(in srgb, #a3a3a3 18%, var(--mfc-surface)) !important;
+  --score-light-1: color-mix(in srgb, #df2f26 22%, var(--mfc-surface)) !important;
+  --score-light-2: color-mix(in srgb, #f0871e 22%, var(--mfc-surface)) !important;
+  --score-light-3: color-mix(in srgb, #33ab6f 22%, var(--mfc-surface)) !important;
+  --score-light-4: color-mix(in srgb, #4ea3e0 22%, var(--mfc-surface)) !important;
+  --score-light-5: color-mix(in srgb, #a18be0 22%, var(--mfc-surface)) !important;
+}
+
+/* The score utility classes hardcode their colours, so point them at the variables above. */
+html[data-mfc-mode="dark"] .bg-score-light-0 { background-color: var(--score-light-0) !important; }
+html[data-mfc-mode="dark"] .bg-score-light-1 { background-color: var(--score-light-1) !important; }
+html[data-mfc-mode="dark"] .bg-score-light-2 { background-color: var(--score-light-2) !important; }
+html[data-mfc-mode="dark"] .bg-score-light-3 { background-color: var(--score-light-3) !important; }
+html[data-mfc-mode="dark"] .bg-score-light-4 { background-color: var(--score-light-4) !important; }
+html[data-mfc-mode="dark"] .bg-score-light-5 { background-color: var(--score-light-5) !important; }
+html[data-mfc-mode="dark"] .text-score-0 { color: var(--score-0) !important; }
+html[data-mfc-mode="dark"] .text-score-4 { color: var(--score-4) !important; }
+html[data-mfc-mode="dark"] .text-score-5 { color: var(--score-5) !important; }
+
+/* Older Forum views hardcode white instead of using --white. */
+html[data-mfc-theme] :is(
+  .bg-white,
+  .text-input,
+  .textarea,
+  .one-line-input-view,
+  .RichEditor-root,
+  .menu-view .menu-items,
+  .menu-view .menu-items li.menu-item-view .row,
+  .outcome-assessment-editor-view,
+  .outcome-index-view .all-outcomes-view,
+  .bug-report-form-v2
+),
+html[data-mfc-theme] .content-wrapper :is(
+  [style*="background-color: white"],
+  [style*="background-color: #fff"],
+  [style*="background-color: rgb(255, 255, 255)"]
+) {
+  background-color: var(--white) !important;
+}
+
+html[data-mfc-theme] .menu-view .menu-items :is(a, .row) {
+  color: var(--black-tint-20) !important;
+}
+
+html[data-mfc-theme] .content-wrapper :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="color"]), select, textarea) {
+  background-color: var(--white) !important;
+  color: var(--black-tint-20) !important;
+  border-color: var(--black-tint-90) !important;
+}
+
+/* Cards: a hairline in the theme's line colour keeps them distinct from the page. */
+html[data-mfc-theme] :is([data-mfc-card="1"], .dashboard-module, .breadcrumbs, .outcome-index-view .all-outcomes-view) {
+  box-shadow: 0 0 0 1px var(--mfc-line) !important;
+}
+
+/* Sidebar has its own colours so it stays dark-on-light and light-on-dark. */
+html[data-mfc-theme] .sidebar-list-view {
+  background-color: var(--mfc-sidebar) !important;
+}
+
+html[data-mfc-theme] :is(
+  .sidebar-list-view .sidebar-items-list .sidebar-item-view > a,
+  .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view > a
+) {
+  color: var(--mfc-sidebar-text) !important;
+}
+
+html[data-mfc-theme] :is(
+  .sidebar-list-view .sidebar-items-list .sidebar-item-view > a,
+  .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view > a
+):hover {
+  background-color: var(--mfc-sidebar-hover) !important;
+}
+
+html[data-mfc-theme] :is(
+  .sidebar-list-view .sidebar-items-list .sidebar-item-view.active,
+  .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view.active
+) {
+  background-color: var(--mfc-sidebar-active) !important;
+}
+
+html[data-mfc-theme] :is(
+  .sidebar-list-view .sidebar-items-list .sidebar-item-view.active > a,
+  .sidebar-sub-list-view .sidebar-sub-items-list .sidebar-sub-item-view.active > a
+) {
+  color: #ffffff !important;
+}
+
+/* Header text sits on a photo or the sidebar colour, so it is always white. */
+html[data-mfc-theme] header#header .text-white {
+  color: #ffffff !important;
+}
+
+html[data-mfc-header] header#header .profile-short-name {
+  color: rgba(255, 255, 255, 0.85) !important;
+}
+
+/* ---------------------------------------------------------------- Accent */
+
+html[data-mfc-accent],
+html[data-mfc-accent] body {
+  --blue: var(--mfc-accent) !important;
+  --blue-shade-20: var(--mfc-accent-shade-20) !important;
+  --blue-shade-40: var(--mfc-accent-shade-40) !important;
+  --blue-tint-20: var(--mfc-accent-tint-20) !important;
+  --blue-tint-90: var(--mfc-accent-tint-90) !important;
+}
+
+/* ---------------------------------------------------------------- Header */
+
+html[data-mfc-header="color"] .imagery {
+  background: var(--mfc-sidebar) !important;
+}
+
+html[data-mfc-header="image"] .imagery {
+  background-color: #222 !important;
+  /* The overlay keeps the white page title readable on bright photos. */
+  background-image: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1) 65%), var(--mfc-header-image) !important;
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+}
+
+/* ---------------------------------------------------------------- Text */
+
+html[data-mfc-text-size] {
+  font-size: var(--mfc-font-size) !important;
+}
+
+/* The header keeps Minerva's own typefaces. */
+html[data-mfc-fonts] :is(.body, .body-s, .body-xs, button, input, select, textarea, table, aside.sidebar, article#main-semantic-content):not(header#header *) {
+  font-family: var(--mfc-font-body) !important;
+}
+
+html[data-mfc-fonts] :is(h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6):not(header#header *) {
+  font-family: var(--mfc-font-heading) !important;
+}
+
+/* ---------------------------------------------------------------- Corners */
+
+html[data-mfc-corners],
+html[data-mfc-corners] body {
+  --border-radius: var(--mfc-radius-control) !important;
+}
+
+/* [data-mfc-card] is set by content.js on Forum's <Box> components that draw a card. */
+html[data-mfc-corners] :is([data-mfc-card="1"], .dashboard-module, .breadcrumbs, .outcome-index-view .all-outcomes-view, .fds-card, .menu-view .menu-items, [class*="shadow-level-"]) {
+  border-radius: var(--mfc-radius-card) !important;
+}
+
+html[data-mfc-corners] [data-testid="Button"] {
+  border-radius: var(--mfc-radius-control) !important;
+}
+
+html[data-mfc-corners] table.fds-table thead tr > :first-child {
+  border-top-left-radius: var(--mfc-radius-control) !important;
+  border-bottom-left-radius: var(--mfc-radius-control) !important;
+}
+
+html[data-mfc-corners] table.fds-table thead tr > :last-child {
+  border-top-right-radius: var(--mfc-radius-control) !important;
+  border-bottom-right-radius: var(--mfc-radius-control) !important;
+}
+
+html[data-mfc-corners] :is(.profile-photo-medium, .circle-button--transparent) {
+  border-radius: 999px !important;
 }

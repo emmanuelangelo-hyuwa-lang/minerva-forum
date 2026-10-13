@@ -2,113 +2,72 @@
 
 Forum Customizer is a Chromium extension for locally customizing the appearance of `forum.minerva.edu`.
 
-It is built using Manifest V3 and plain HTML, CSS, and JavaScript. The extension injects runtime styling into the Minerva forum page and updates that styling on client-side navigation.
+It is built using Manifest V3 and plain HTML, CSS, and JavaScript, with no third-party libraries and no network requests.
 
 ## Features
 
-- Popup settings panel for theme, fonts, accent color, and header backdrop.
-- Separate body font and heading font controls.
-- Eight built-in theme presets.
-- Custom accent color support for the default theme.
-- Header backdrop presets plus custom header image upload.
-- Header uploads are stored in `chrome.storage.local` and scaled to fit.
-- Rounded UI toggle for cards, panels, and sidebar containers.
-- Bug report button linking to `kunate0@gmail.com`.
-- Preference persistence via `chrome.storage.sync`.
-- Automatic style reapplication during Minerva SPA navigation.
+- 16 themes (8 light, 8 dark) plus Forum's own look. Each theme recolors the page, cards, sidebar and header together.
+- Accent color override for any theme.
+- Corner style: Square (Forum's default), Soft, or Round.
+- Text size from 90% to 125%.
+- Seven curated font pairings (body + heading) that are designed to work together.
+- A library of 20 header photos, pre-cropped to the exact shape of Forum's header.
+- A header studio for uploading your own photo, positioning it, and zooming it inside a header-shaped frame before saving.
+- Settings apply live to every open Forum tab and sync across devices via `chrome.storage.sync`.
+- Settings from v1.0.x are migrated automatically.
 
 ## Installation
 
-1. Open Chrome or a Chromium-based browser.
+1. Open Chrome or a Chromium-based browser (version 111 or newer).
 2. Go to `chrome://extensions`.
 3. Enable **Developer mode** in the top-right corner.
 4. Click **Load unpacked**.
-5. Choose the `minerva forum customizer` folder.
-6. Confirm the extension appears in the extension list.
+5. Choose the `minerva forum customizer` folder (the one containing `manifest.json`).
 
 ## Usage
 
-1. Open a page on `https://forum.minerva.edu`.
-2. Click the extension toolbar icon.
-3. Select your preferred theme, fonts, accent color, and header backdrop.
-4. Upload a custom header image if desired.
-5. The page updates immediately and saves settings automatically.
-6. Refresh or navigate inside the forum app and the custom styling persists.
+Click the toolbar icon on any page. The popup has three tabs:
 
-## Popup controls
+- **Theme**: pick a light or dark theme, an optional accent color, and a corner style.
+- **Header**: pick the theme color or one of the bundled photos, or click **Upload and crop your own** to open the header studio.
+- **Text**: text size and font pairing.
 
-- **Theme**: Chooses a color palette preset.
-- **Body Font**: Controls the text font across the forum.
-- **Heading Font**: Controls headings and title fonts.
-- **Accent color**: Adjusts the accent color for the default theme.
-- **Header backdrop**: Selects default, curated presets, or custom upload.
-- **Upload header image**: Stores a custom header image locally and applies it to the header area.
-- **Rounded UI**: Applies softer border radius styling to cards and panels.
-- **Reset**: Restores defaults and clears the uploaded header image.
-- **Report a bug**: Opens a mail message to `kunate0@gmail.com`.
+**Reset** restores Forum's default look and removes any uploaded header.
 
 ## File overview
 
-- `manifest.json`
-  - Extension metadata, permissions, content scripts, and popup configuration.
-- `content/content.js`
-  - Runtime page logic, style generation, MutationObserver support, and message handling.
-- `popup/popup.html`
-  - Settings panel markup and controls.
-- `popup/popup.js`
-  - Popup initialization, storage handling, event listeners, and update dispatch.
-- `popup/popup.css`
-  - Popup styling and layout.
-- `styles/injected.css`
-  - Minimal base stylesheet loaded by the content script.
-- `utils/defaults.js`
-  - Shared default preference object used by both popup and content script.
-- `utils/storage.js`
-  - Async wrapper for `chrome.storage.sync` and `chrome.storage.local`.
+- `manifest.json`: extension metadata, permissions, content script and pages.
+- `utils/catalog.js`: every choice the user can make (themes, font pairings, corner styles, header photos) and the function that turns a theme into a full palette. Shared by all scripts.
+- `utils/defaults.js`: default preferences and migration of older saved settings.
+- `utils/storage.js`: reads and writes preferences and the uploaded header image.
+- `styles/injected.css`: **all** styling applied to Forum.
+- `content/content.js`: applies saved preferences to Forum pages.
+- `popup/`: the toolbar popup.
+- `options/`: the header studio (upload, position, zoom, save).
+- `images/headers/`: bundled 2400×200 header photos. Sources are listed in `CREDITS.md` there.
 
 ## How it works
 
-### Content script injection
+Forum draws almost everything with a small set of CSS variables (`--white` for cards, `--black-tint-95` for the page, `--black-tint-20` for text, `--blue` for the accent, and so on). Themes work by pointing those variables at the theme's colors, so components picked up automatically stay consistent.
 
-The content script is injected into all matching `forum.minerva.edu` pages at `document_idle`. It loads saved preferences and builds a stylesheet from those values. The generated stylesheet is inserted into the page as a `<style>` tag with the ID `minerva-forum-customizer-styles`.
-
-### Preference loading and saving
-
-- `utils/storage.js` reads and writes `minervaPrefs` to `chrome.storage.sync`.
-- Uploaded header images are stored as data URLs under `minervaHeaderImage` in `chrome.storage.local`.
-- `utils/defaults.js` exposes `window.MINERVA_DEFAULT_PREFS` so both the popup and content script share the same default values.
-
-### Style generation
-
-- `content/content.js` maps theme keys to color palettes and font keys to CSS font stacks.
-- A custom header image or preset image is applied using `background-image` rules.
-- Custom header images use `background-size: 100% auto`, `background-repeat: no-repeat`, and `background-position: center bottom` for width-fitting and bottom alignment.
-- Rounded UI uses explicit page selectors to apply border-radius and overflow styling to cards, panels, and sidebar sections.
-- Accent color values update CSS variables for the default theme.
-
-### Updating live pages
-
-- The popup sends `UPDATE_PREFS` messages to the active tab whenever the user changes a setting.
-- The content script listens for those messages and refreshes the injected stylesheet.
-- A MutationObserver monitors the page container for DOM changes and reapplies styles if the Minerva SPA updates content.
-- Another observer keeps the injected stylesheet last in the `<head>` to preserve styling priority.
+- `content/content.js` never writes CSS rules. It sets `data-mfc-*` attributes on `<html>` (for example `data-mfc-theme="sage"`, `data-mfc-mode="dark"`) and writes the chosen values as `--mfc-*` variables into a single `<style id="mfc-vars">`.
+- `styles/injected.css` contains every rule, each guarded by one of those attributes. To debug, inspect `<html>` for the active attributes and `#mfc-vars` for the current values, then find the matching section in the stylesheet.
+- Forum's React cards have generated class names that change between releases, so `content.js` marks real cards (Forum's `[data-testid="Box"]` elements that draw a surface) with `data-mfc-card="1"` for the corner and outline rules.
+- The content script listens to `chrome.storage.onChanged`, so changes made in the popup or header studio apply immediately to all Forum tabs.
 
 ## Permissions
 
-- `storage`: store preferences and uploaded header images.
-- `activeTab`: send updates to the active tab.
-- Host permission: `*://forum.minerva.edu/*`.
+- `storage`: save preferences and the uploaded header image.
+- Host permission `*://forum.minerva.edu/*`: run the content script on Forum and let it load the bundled header images.
 
 ## Known limitations
 
-- Custom header uploads are stored locally, not synced across devices.
-- Accent color is most reliable on the default theme.
-- Large changes to Minerva's DOM may require selector updates in `content/content.js`.
-- `styles/injected.css` is intentionally small because runtime CSS is generated in JavaScript.
+- Uploaded headers are stored in `chrome.storage.local`, so they don't sync across devices (the other settings do).
+- In dark themes, a few embedded third-party views (PDF viewer, some editors) keep their own light styling.
+- The header is a full-width strip, so narrow windows trim the left and right edges of the photo. The header studio shades the area that gets trimmed on a typical laptop.
 
 ## Maintenance notes
 
-- Add new themes by updating `THEMES` in `content/content.js` and adding matching options in `popup/popup.html`.
-- Add new header presets by extending `HEADER_IMAGES` in `content/content.js`.
-- If Minerva changes its DOM structure, update the CSS selectors inside `content/content.js`.
-- Preserve the `UPDATE_PREFS` message flow when extending popup state.
+- Add a theme by adding one line to `THEMES` in `utils/catalog.js` (name, mode, page, surface, text, accent). The rest of the palette, the popup swatch and the sidebar colors are derived automatically.
+- Add a header photo by saving a 2400×200 JPEG to `images/headers/`, adding it to `HEADERS` in `utils/catalog.js`, and crediting it in `images/headers/CREDITS.md`.
+- If Forum changes its markup, the selectors to update are all in `styles/injected.css`.

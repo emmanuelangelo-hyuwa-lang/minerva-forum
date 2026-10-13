@@ -1,0 +1,193 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1c1c1f;
+  --muted: #6b6b73;
+  --line: #e6e6ea;
+  --hover: #f4f4f6;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1c1f;
+    --fg: #ededf0;
+    --muted: #9a9aa3;
+    --line: #313137;
+    --hover: #26262a;
+    color-scheme: dark;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 24px;
+}
+
+h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.lede,
+.hint {
+  margin: 0 0 20px;
+  color: var(--muted);
+}
+
+.hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
+
+.drop {
+  display: block;
+  padding: 28px;
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.drop:hover,
+.drop.over {
+  background: var(--hover);
+  color: var(--fg);
+}
+
+.drop input {
+  display: none;
+}
+
+#editor {
+  margin-top: 24px;
+}
+
+/* Same 12:1 shape as the saved 2400x200 image. */
+.frame {
+  position: relative;
+  aspect-ratio: 12 / 1;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #222;
+  cursor: grab;
+  touch-action: none;
+}
+
+.frame.dragging {
+  cursor: grabbing;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Same overlay styles/injected.css draws on Forum (preview only; not saved into the image). */
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.1) 65%);
+  pointer-events: none;
+}
+
+.title-preview {
+  position: absolute;
+  left: 13%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #fff;
+  pointer-events: none;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.title-preview strong {
+  display: block;
+  font: 600 clamp(14px, 2.2vw, 26px) / 1.1 Georgia, serif;
+}
+
+.title-preview span {
+  font-size: clamp(9px, 0.9vw, 12px);
+}
+
+/* On a ~1440px-wide window the header is about 10:1, so ~8% of each side is cut off. */
+.trim {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 8.3%;
+  background: rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+}
+
+.trim.left { left: 0; border-right: 1px dashed rgba(255, 255, 255, 0.6); }
+.trim.right { right: 0; border-left: 1px dashed rgba(255, 255, 255, 0.6); }
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.zoom {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.zoom input {
+  width: 220px;
+  accent-color: var(--fg);
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font: inherit;
+  cursor: pointer;
+}
+
+.primary {
+  border: 1px solid var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+.secondary {
+  border: 1px solid var(--line);
+  background: none;
+  color: var(--fg);
+}
+
+.secondary:hover {
+  background: var(--hover);
+}
+
+.status {
+  min-height: 1.5em;
+  margin: 12px 0 0;
+  color: var(--muted);
+}

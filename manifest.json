@@ -1,11 +1,17 @@
 {
   "manifest_version": 3,
   "name": "Minerva Forum Customizer",
-  "version": "1.0.0",
-  "description": "Personalize the appearance of forum.minerva.edu",
+  "version": "1.1.0",
+  "description": "Personalize the appearance of forum.minerva.edu with light and dark themes, font pairings, text size, and header images.",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "minimum_chrome_version": "111",
   "permissions": [
-    "storage",
-    "activeTab"
+    "storage"
   ],
   "host_permissions": [
     "*://forum.minerva.edu/*"
@@ -14,15 +20,33 @@
     {
       "matches": ["*://forum.minerva.edu/*"],
       "js": [
+        "utils/catalog.js",
         "utils/defaults.js",
         "utils/storage.js",
         "content/content.js"
       ],
       "css": ["styles/injected.css"],
-      "run_at": "document_idle"
+      "run_at": "document_start"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": ["images/headers/*.jpg"],
+      "matches": ["*://forum.minerva.edu/*"]
+    }
+  ],
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
   "action": {
-    "default_popup": "popup/popup.html"
+    "default_popup": "popup/popup.html",
+    "default_title": "Minerva Forum Customizer",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   }
 }
